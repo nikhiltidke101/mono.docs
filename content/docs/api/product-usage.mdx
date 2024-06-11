@@ -1,0 +1,6579 @@
+---
+title: product-usage
+description: Product Usage APIs
+toc: false
+---
+
+import { Root, API, APIInfo, APIExample, Property } from 'fumadocs-ui/components/api'
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs'
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Root>
+
+<API>
+
+<APIInfo method={"POST"} route={"/metrics.devrev.ingest"}>
+
+## metrics-devrev-ingest
+
+Ingest endpoint for DevRev metrics data from clients.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"metrics"} type={"array of object"}>
+
+Metrics data received from Dev orgs.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={true} deprecated={false} name={"data_points"} type={"array of object"}>
+
+One or more data points collected for a given metric such as object
+usage, object state etc.
+
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={false} deprecated={false} name={"dimensions"} type={"array of object"}>
+
+Key-value pairs for specifying additional attributes.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={true} deprecated={false} name={"key"} type={"string"}>
+
+The key for the dimension. The keys must be unique and it is not
+allowed to have more than one value with the same key. Key must be
+at least one character long and cannot be longer than 64
+characters.Key can only contain alphanumeric characters (A-Z, a-z,
+and 0-9) and underscores (_). Key cannot start with a number and is
+case-insensitive.
+
+
+</Property>
+
+<Property required={true} deprecated={false} name={"value"} type={"string"}>
+
+The value for the dimension. Value could be any string and cannot
+be longer than 256 characters.
+
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"id"} type={"string"}>
+
+An ID that uniquely identifies the metric data point. This ID will
+be used for deduplication. Clients can generate its own ID and send
+it in the request. If not provided, DevRev will perform
+content-based deduplication.
+
+
+</Property>
+
+<Property required={true} deprecated={false} name={"timestamp"} type={"string"}>
+
+Timestamp when metric value is captured.
+
+<span>Example:  `"2023-01-01T12:00:00.000Z"`</span>
+
+<span>Format:  `"date-time"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"value"} type={"number"}>
+
+The value corresponding to the metric. For simply recording
+occurrence of an event, this value should be 1.0.
+
+
+<span>Format:  `"double"`</span>
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"name"} type={"string"}>
+
+Name of the metric which is being measured. For example,
+num_api_calls, num_active_users, etc.
+
+
+</Property>
+
+<Property required={true} deprecated={false} name={"org_ref"} type={"string"}>
+
+Rev Org ID or external_ref for which metric is being published.Rev
+Org ID is DevRev DON ID. For example,
+don:identity:dvrv-us-1:devo/0:revo/156. External_ref is the
+identification of DevRev customer's customers and maintained by
+DevRev's customers. Devrev will internally resolve external_ref to
+Rev Org ID and use it for further processing. For example,
+external_ref=org_customer_1 may resolve to
+don:identity:dvrv-us-1:devo/0:revo/155.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"user_ref"} type={"string"}>
+
+Rev User ID or user ref for which metric is being published.
+
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/metrics.devrev.ingest" \
+  -d '{
+  "metrics": [
+    {
+      "data_points": [
+        {
+          "dimensions": [
+            {
+              "key": "string",
+              "value": "string"
+            }
+          ],
+          "id": "string",
+          "timestamp": "2023-01-01T12:00:00.000Z",
+          "value": 0.1
+        }
+      ],
+      "name": "string",
+      "org_ref": "string",
+      "user_ref": "string"
+    }
+  ]
+}'
+```
+
+<Tabs items={["400","401","403","429","500","503"]}>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/uoms.count"}>
+
+## uoms-count
+
+Counts the number of Unit of Measurements based on the given filters.
+
+
+### Query Parameters
+
+<Property required={false} deprecated={false} name={"aggregation_types"} type={"array of string"}>
+
+List of aggregation types for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"ids"} type={"array of string"}>
+
+List of Unit of Measurement (UOM) DONs to be used in filtering
+complete list of UOMs defined in a Dev Org.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"metric_names"} type={"array of string"}>
+
+List of metric names for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"part_ids"} type={"array of string"}>
+
+List of part IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"product_ids"} type={"array of string"}>
+
+List of product IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"unit_types"} type={"array of string"}>
+
+List of unit types for filtering list of UOMs.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/uoms.count"
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "count": 0
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export interface UomsCountResponse {
+  /**
+   * Count of Unit of Measurements matching the filter.
+   */
+  count: number;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/uoms.count"}>
+
+## uoms-count-post
+
+Counts the number of Unit of Measurements based on the given filters.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"aggregation_types"} type={"array of string"}>
+
+List of aggregation types for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"ids"} type={"array of string"}>
+
+List of Unit of Measurement (UOM) DONs to be used in filtering
+complete list of UOMs defined in a Dev Org.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"metric_names"} type={"array of string"}>
+
+List of metric names for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"part_ids"} type={"array of string"}>
+
+List of part IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"product_ids"} type={"array of string"}>
+
+List of product IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"unit_types"} type={"array of string"}>
+
+List of unit types for filtering list of UOMs.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/uoms.count" \
+  -d '{
+  "aggregation_types": [
+    "duration"
+  ],
+  "ids": [
+    "string"
+  ],
+  "metric_names": [
+    "string"
+  ],
+  "part_ids": [
+    "PROD-12345"
+  ],
+  "product_ids": [
+    "PROD-12345"
+  ],
+  "unit_types": [
+    "boolean"
+  ]
+}'
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "count": 0
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export interface UomsCountResponse {
+  /**
+   * Count of Unit of Measurements matching the filter.
+   */
+  count: number;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/uoms.create"}>
+
+## uoms-create
+
+Creates a Unit of Measurement on a part.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"aggregation_detail"} type={"object"}>
+
+Stores aggregation type and dimension information.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={true} deprecated={false} name={"aggregation_type"} type={"string"}>
+
+{/* Aggregation type to be used while aggregating the metering data for the
+UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+{ M1:2, M1:4 } =\> {M1:6} 2] Minimum - min of all the values for the
+meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+{M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+the meter in the given period (not considering the data from the
+previous billing period) Ex. January {M1:{VM:VM0}}, February
+{M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+Sum of distinct active unique dimension observed for a meter in the
+given period, taking into consideration the active data from the
+previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+6] Duration - Sum of distinct active unique dimension duration for a
+meter in the given period, taking into consideration the active data
+from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+{M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+latest/last meter in the given period 8] Oldest - consider the
+oldest/first record in the given period. */}
+
+
+<span>Value in:  `"duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"unique_dimension"} type={"string"}>
+
+Unique dimension if provided to be considered for grouping metering
+data for the UOM.
+
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"description"} type={"string"}>
+
+Description of the Unit of Measurement (UOM).
+
+</Property>
+
+<Property required={false} deprecated={false} name={"dimensions"} type={"array of string"}>
+
+The list of dimensions that can be emitted as part of metrics data.
+Dimensions consist of list of key-value pairs. For example, if the
+UOM is 'number_of_api_calls', then dimensions can be ['api_name',
+'api_version'].Dimension keys can only contain alphanumeric
+characters (A-Z, a-z, and 0-9) and underscores (_). Dimension keys
+cannot start with a number and is case-insensitive.Dimension keys
+must be unique and it is not allowed to have more than one value
+with the same key.Metrics data ingested in DevRev metrics format
+will be grouped and aggregated based on the dimensions specified in
+UOM.
+
+
+<span>Minimum length:  `1`</span>
+
+<span>Maximum length:  `64`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"metric_name"} type={"string"}>
+
+Name of the Unit of Measurement (UOM). Unit of Measurement is a
+unit of measure defined over a part offered by a Dev Org. A single
+part can have multiple unit of measurements defined over it. For
+example, a part can be 'video call', one UOM defined on this can be
+'number_of_calls', other UOM can be 'call_duration' etc.Metric name
+should be unique across all UOMs in a Dev Org.Metric name can only
+contain alphanumeric characters (A-Z, a-z, and 0-9) and underscores
+(_). Metric name cannot start with a number and is
+case-insensitive.
+
+
+<span>Minimum length:  `1`</span>
+
+<span>Maximum length:  `64`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"name"} type={"string"}>
+
+Human readable name of the Unit of Measurement (UOM).
+
+</Property>
+
+<Property required={false} deprecated={false} name={"part_id"} type={"string"}>
+
+The part ID for which the Unit of Measurement (UOM) is defined.
+When defined, ingested metrics data will be associated with part
+and product specified in UOM.
+
+
+<span>Example:  `"PROD-12345"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"product_id"} type={"string"}>
+
+The product ID for which the Unit of Measurement (UOM) is defined.
+
+
+<span>Example:  `"PROD-12345"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"unit"} type={"object"}>
+
+Unit encapsulates the name of the unit and the type of the unit. For
+example, '#Number of API calls' where name is 'number_of_api_calls' and
+type is 'number'.
+
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={true} deprecated={false} name={"name"} type={"string"}>
+
+This represents human readable unit name of the UOM For example,
+number of API calls.
+
+
+</Property>
+
+<Property required={true} deprecated={false} name={"type"} type={"string"}>
+
+This defines the UOM unit type. For example, for 'number of video
+calls', unit type will be a number.
+
+
+<span>Value in:  `"boolean" | "number"`</span>
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `201` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/uoms.create" \
+  -d '{
+  "aggregation_detail": {
+    "aggregation_type": "duration",
+    "unique_dimension": "string"
+  },
+  "description": "string",
+  "dimensions": [
+    "string"
+  ],
+  "metric_name": "string",
+  "name": "string",
+  "part_id": "PROD-12345",
+  "product_id": "PROD-12345",
+  "unit": {
+    "name": "string",
+    "type": "boolean"
+  }
+}'
+```
+
+<Tabs items={["201","400","401","403","429","500","503"]}>
+
+<Tab value={"201"}>
+
+
+
+```json title="Example Response"
+{
+  "uom": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "aggregation_details": {
+      "aggregation_type": "duration",
+      "unique_dimension": "string"
+    },
+    "description": "string",
+    "dimensions": [
+      "string"
+    ],
+    "is_enabled": true,
+    "metric_name": "string",
+    "metric_scope": "org",
+    "name": "string",
+    "part": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "product": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "unit": {
+      "name": "string",
+      "type": "boolean"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Uom = AtomBase & {
+  aggregation_details: AggregationDetail;
+  /**
+   * Description of the UOM.
+   */
+  description?: string;
+  /**
+   * The list of dimensions that can be emitted along with the metering
+   * data.
+   *
+   */
+  dimensions?: string[];
+  /**
+   * If set to true, then the UOM can be configured as part of
+   * entitlements in skus and metering data only for the enabled uoms
+   * will be passed through the metering pipeline.
+   *
+   */
+  is_enabled: boolean;
+  /**
+   * Human readable metric name of the UOM.
+   */
+  metric_name: string;
+  /**
+   * The granularity at which the metrics ingestion data is to be emitted
+   * for the UOM.
+   *
+   */
+  metric_scope: "org" | "user";
+  /**
+   * Human readable name of the UOM.
+   */
+  name: string;
+  part?: PartSummary;
+  product: PartSummary;
+  unit: Unit;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type ProductSummary = PartBaseSummary;
+
+export interface UomsCreateResponse {
+  uom: Uom;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Stores aggregation type and dimension information.
+ */
+export interface AggregationDetail {
+  /**
+   * Aggregation type to be used while aggregating the metering data for the
+   * UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+   * { M1:2, M1:4 } => {M1:6} 2] Minimum - min of all the values for the
+   * meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+   * of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+   * {M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+   * the meter in the given period (not considering the data from the
+   * previous billing period) Ex. January {M1:{VM:VM0}}, February
+   * {M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+   * Sum of distinct active unique dimension observed for a meter in the
+   * given period, taking into consideration the active data from the
+   * previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+   * February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+   * 6] Duration - Sum of distinct active unique dimension duration for a
+   * meter in the given period, taking into consideration the active data
+   * from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+   * {M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+   * 30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+   * latest/last meter in the given period 8] Oldest - consider the
+   * oldest/first record in the given period.
+   *
+   */
+  aggregation_type: "duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count";
+  /**
+   * Unique dimension if provided to be considered for grouping metering
+   * data for the UOM.
+   *
+   */
+  unique_dimension?: string;
+}
+/**
+ * Unit encapsulates the name of the unit and the type of the unit. For
+ * example, '#Number of API calls' where name is 'number_of_api_calls' and
+ * type is 'number'.
+ *
+ */
+export interface Unit {
+  /**
+   * This represents human readable unit name of the UOM For example,
+   * number of API calls.
+   *
+   */
+  name: string;
+  /**
+   * This defines the UOM unit type. For example, for 'number of video
+   * calls', unit type will be a number.
+   *
+   */
+  type: "boolean" | "number";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/uoms.delete"}>
+
+## uoms-delete
+
+Deletes a Unit of Measurement.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The Unit of Measurement (UOM)'s DON.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `204` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/uoms.delete" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["400","401","403","404","429","500","503"]}>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/uoms.get"}>
+
+## uoms-get
+
+Gets a Unit of Measurement.
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The Unit of Measurement (UOM)'s DON.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/uoms.get"
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "uom": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "aggregation_details": {
+      "aggregation_type": "duration",
+      "unique_dimension": "string"
+    },
+    "description": "string",
+    "dimensions": [
+      "string"
+    ],
+    "is_enabled": true,
+    "metric_name": "string",
+    "metric_scope": "org",
+    "name": "string",
+    "part": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "product": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "unit": {
+      "name": "string",
+      "type": "boolean"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Uom = AtomBase & {
+  aggregation_details: AggregationDetail;
+  /**
+   * Description of the UOM.
+   */
+  description?: string;
+  /**
+   * The list of dimensions that can be emitted along with the metering
+   * data.
+   *
+   */
+  dimensions?: string[];
+  /**
+   * If set to true, then the UOM can be configured as part of
+   * entitlements in skus and metering data only for the enabled uoms
+   * will be passed through the metering pipeline.
+   *
+   */
+  is_enabled: boolean;
+  /**
+   * Human readable metric name of the UOM.
+   */
+  metric_name: string;
+  /**
+   * The granularity at which the metrics ingestion data is to be emitted
+   * for the UOM.
+   *
+   */
+  metric_scope: "org" | "user";
+  /**
+   * Human readable name of the UOM.
+   */
+  name: string;
+  part?: PartSummary;
+  product: PartSummary;
+  unit: Unit;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type ProductSummary = PartBaseSummary;
+
+export interface UomsGetResponse {
+  uom: Uom;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Stores aggregation type and dimension information.
+ */
+export interface AggregationDetail {
+  /**
+   * Aggregation type to be used while aggregating the metering data for the
+   * UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+   * { M1:2, M1:4 } => {M1:6} 2] Minimum - min of all the values for the
+   * meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+   * of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+   * {M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+   * the meter in the given period (not considering the data from the
+   * previous billing period) Ex. January {M1:{VM:VM0}}, February
+   * {M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+   * Sum of distinct active unique dimension observed for a meter in the
+   * given period, taking into consideration the active data from the
+   * previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+   * February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+   * 6] Duration - Sum of distinct active unique dimension duration for a
+   * meter in the given period, taking into consideration the active data
+   * from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+   * {M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+   * 30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+   * latest/last meter in the given period 8] Oldest - consider the
+   * oldest/first record in the given period.
+   *
+   */
+  aggregation_type: "duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count";
+  /**
+   * Unique dimension if provided to be considered for grouping metering
+   * data for the UOM.
+   *
+   */
+  unique_dimension?: string;
+}
+/**
+ * Unit encapsulates the name of the unit and the type of the unit. For
+ * example, '#Number of API calls' where name is 'number_of_api_calls' and
+ * type is 'number'.
+ *
+ */
+export interface Unit {
+  /**
+   * This represents human readable unit name of the UOM For example,
+   * number of API calls.
+   *
+   */
+  name: string;
+  /**
+   * This defines the UOM unit type. For example, for 'number of video
+   * calls', unit type will be a number.
+   *
+   */
+  type: "boolean" | "number";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/uoms.get"}>
+
+## uoms-get-post
+
+Gets a Unit of Measurement.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The Unit of Measurement (UOM)'s DON.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/uoms.get" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "uom": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "aggregation_details": {
+      "aggregation_type": "duration",
+      "unique_dimension": "string"
+    },
+    "description": "string",
+    "dimensions": [
+      "string"
+    ],
+    "is_enabled": true,
+    "metric_name": "string",
+    "metric_scope": "org",
+    "name": "string",
+    "part": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "product": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "unit": {
+      "name": "string",
+      "type": "boolean"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Uom = AtomBase & {
+  aggregation_details: AggregationDetail;
+  /**
+   * Description of the UOM.
+   */
+  description?: string;
+  /**
+   * The list of dimensions that can be emitted along with the metering
+   * data.
+   *
+   */
+  dimensions?: string[];
+  /**
+   * If set to true, then the UOM can be configured as part of
+   * entitlements in skus and metering data only for the enabled uoms
+   * will be passed through the metering pipeline.
+   *
+   */
+  is_enabled: boolean;
+  /**
+   * Human readable metric name of the UOM.
+   */
+  metric_name: string;
+  /**
+   * The granularity at which the metrics ingestion data is to be emitted
+   * for the UOM.
+   *
+   */
+  metric_scope: "org" | "user";
+  /**
+   * Human readable name of the UOM.
+   */
+  name: string;
+  part?: PartSummary;
+  product: PartSummary;
+  unit: Unit;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type ProductSummary = PartBaseSummary;
+
+export interface UomsGetResponse {
+  uom: Uom;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Stores aggregation type and dimension information.
+ */
+export interface AggregationDetail {
+  /**
+   * Aggregation type to be used while aggregating the metering data for the
+   * UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+   * { M1:2, M1:4 } => {M1:6} 2] Minimum - min of all the values for the
+   * meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+   * of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+   * {M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+   * the meter in the given period (not considering the data from the
+   * previous billing period) Ex. January {M1:{VM:VM0}}, February
+   * {M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+   * Sum of distinct active unique dimension observed for a meter in the
+   * given period, taking into consideration the active data from the
+   * previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+   * February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+   * 6] Duration - Sum of distinct active unique dimension duration for a
+   * meter in the given period, taking into consideration the active data
+   * from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+   * {M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+   * 30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+   * latest/last meter in the given period 8] Oldest - consider the
+   * oldest/first record in the given period.
+   *
+   */
+  aggregation_type: "duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count";
+  /**
+   * Unique dimension if provided to be considered for grouping metering
+   * data for the UOM.
+   *
+   */
+  unique_dimension?: string;
+}
+/**
+ * Unit encapsulates the name of the unit and the type of the unit. For
+ * example, '#Number of API calls' where name is 'number_of_api_calls' and
+ * type is 'number'.
+ *
+ */
+export interface Unit {
+  /**
+   * This represents human readable unit name of the UOM For example,
+   * number of API calls.
+   *
+   */
+  name: string;
+  /**
+   * This defines the UOM unit type. For example, for 'number of video
+   * calls', unit type will be a number.
+   *
+   */
+  type: "boolean" | "number";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/uoms.list"}>
+
+## uoms-list
+
+Gets the Unit of Measurements based on the given filters.
+
+### Query Parameters
+
+<Property required={false} deprecated={false} name={"aggregation_types"} type={"array of string"}>
+
+List of aggregation types for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"cursor"} type={"string"}>
+
+The cursor to resume iteration from. If not provided, then iteration
+starts from the beginning.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"ids"} type={"array of string"}>
+
+List of Unit of Measurement (UOM) DONs to be used in filtering
+complete list of UOMs defined in a Dev Org.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of UOMs to be returned in a response. The default
+is '50'.
+
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"metric_names"} type={"array of string"}>
+
+List of metric names for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"mode"} type={"string"}>
+
+The iteration mode to use, otherwise if not set, then "after" is
+used.
+
+
+<span>Value in:  `"after" | "before"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"part_ids"} type={"array of string"}>
+
+List of part IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"product_ids"} type={"array of string"}>
+
+List of product IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"sort_by"} type={"array of string"}>
+
+Fields to sort the Unit Of Measuments (UOMs) by and the direction to
+sort them.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"unit_types"} type={"array of string"}>
+
+List of unit types for filtering list of UOMs.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/uoms.list"
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "next_cursor": "string",
+  "prev_cursor": "string",
+  "uoms": [
+    {
+      "created_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "created_date": "2023-01-01T12:00:00.000Z",
+      "display_id": "string",
+      "id": "string",
+      "modified_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "aggregation_details": {
+        "aggregation_type": "duration",
+        "unique_dimension": "string"
+      },
+      "description": "string",
+      "dimensions": [
+        "string"
+      ],
+      "is_enabled": true,
+      "metric_name": "string",
+      "metric_scope": "org",
+      "name": "string",
+      "part": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      },
+      "product": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      },
+      "unit": {
+        "name": "string",
+        "type": "boolean"
+      }
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Uom = AtomBase & {
+  aggregation_details: AggregationDetail;
+  /**
+   * Description of the UOM.
+   */
+  description?: string;
+  /**
+   * The list of dimensions that can be emitted along with the metering
+   * data.
+   *
+   */
+  dimensions?: string[];
+  /**
+   * If set to true, then the UOM can be configured as part of
+   * entitlements in skus and metering data only for the enabled uoms
+   * will be passed through the metering pipeline.
+   *
+   */
+  is_enabled: boolean;
+  /**
+   * Human readable metric name of the UOM.
+   */
+  metric_name: string;
+  /**
+   * The granularity at which the metrics ingestion data is to be emitted
+   * for the UOM.
+   *
+   */
+  metric_scope: "org" | "user";
+  /**
+   * Human readable name of the UOM.
+   */
+  name: string;
+  part?: PartSummary;
+  product: PartSummary;
+  unit: Unit;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type ProductSummary = PartBaseSummary;
+
+export interface UomsListResponse {
+  /**
+   * The cursor used to iterate subsequent results in accordance to the
+   * sort order. If not set, then no later elements exist.
+   *
+   */
+  next_cursor?: string;
+  /**
+   * The cursor used to iterate preceding results in accordance to the
+   * sort order. If not set, then no prior elements exist.
+   *
+   */
+  prev_cursor?: string;
+  /**
+   * The list of Unit of Measurement (UOM) objects.
+   */
+  uoms: Uom[];
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Stores aggregation type and dimension information.
+ */
+export interface AggregationDetail {
+  /**
+   * Aggregation type to be used while aggregating the metering data for the
+   * UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+   * { M1:2, M1:4 } => {M1:6} 2] Minimum - min of all the values for the
+   * meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+   * of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+   * {M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+   * the meter in the given period (not considering the data from the
+   * previous billing period) Ex. January {M1:{VM:VM0}}, February
+   * {M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+   * Sum of distinct active unique dimension observed for a meter in the
+   * given period, taking into consideration the active data from the
+   * previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+   * February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+   * 6] Duration - Sum of distinct active unique dimension duration for a
+   * meter in the given period, taking into consideration the active data
+   * from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+   * {M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+   * 30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+   * latest/last meter in the given period 8] Oldest - consider the
+   * oldest/first record in the given period.
+   *
+   */
+  aggregation_type: "duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count";
+  /**
+   * Unique dimension if provided to be considered for grouping metering
+   * data for the UOM.
+   *
+   */
+  unique_dimension?: string;
+}
+/**
+ * Unit encapsulates the name of the unit and the type of the unit. For
+ * example, '#Number of API calls' where name is 'number_of_api_calls' and
+ * type is 'number'.
+ *
+ */
+export interface Unit {
+  /**
+   * This represents human readable unit name of the UOM For example,
+   * number of API calls.
+   *
+   */
+  name: string;
+  /**
+   * This defines the UOM unit type. For example, for 'number of video
+   * calls', unit type will be a number.
+   *
+   */
+  type: "boolean" | "number";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/uoms.list"}>
+
+## uoms-list-post
+
+Gets the Unit of Measurements based on the given filters.
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"aggregation_types"} type={"array of string"}>
+
+List of aggregation types for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"cursor"} type={"string"}>
+
+The cursor to resume iteration from. If not provided, then
+iteration starts from the beginning.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"ids"} type={"array of string"}>
+
+List of Unit of Measurement (UOM) DONs to be used in filtering
+complete list of UOMs defined in a Dev Org.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of UOMs to be returned in a response. The
+default is '50'.
+
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"metric_names"} type={"array of string"}>
+
+List of metric names for filtering list of UOMs.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"mode"} type={"string"}>
+
+The iteration mode to use. If "after", then entries after the provided
+cursor will be returned, or if no cursor is provided, then from the
+beginning. If "before", then entries before the provided cursor will be
+returned, or if no cursor is provided, then from the end. Entries will
+always be returned in the specified sort-by order.
+
+
+<span>Value in:  `"after" | "before"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"part_ids"} type={"array of string"}>
+
+List of part IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"product_ids"} type={"array of string"}>
+
+List of product IDs for filtering list of UOMs.
+
+<span>Example:  `["PROD-12345"]`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"sort_by"} type={"array of string"}>
+
+Fields to sort the Unit Of Measuments (UOMs) by and the direction
+to sort them.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"unit_types"} type={"array of string"}>
+
+List of unit types for filtering list of UOMs.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/uoms.list" \
+  -d '{
+  "aggregation_types": [
+    "duration"
+  ],
+  "cursor": "string",
+  "ids": [
+    "string"
+  ],
+  "limit": 0,
+  "metric_names": [
+    "string"
+  ],
+  "mode": "after",
+  "part_ids": [
+    "PROD-12345"
+  ],
+  "product_ids": [
+    "PROD-12345"
+  ],
+  "sort_by": [
+    "string"
+  ],
+  "unit_types": [
+    "boolean"
+  ]
+}'
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "next_cursor": "string",
+  "prev_cursor": "string",
+  "uoms": [
+    {
+      "created_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "created_date": "2023-01-01T12:00:00.000Z",
+      "display_id": "string",
+      "id": "string",
+      "modified_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "aggregation_details": {
+        "aggregation_type": "duration",
+        "unique_dimension": "string"
+      },
+      "description": "string",
+      "dimensions": [
+        "string"
+      ],
+      "is_enabled": true,
+      "metric_name": "string",
+      "metric_scope": "org",
+      "name": "string",
+      "part": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      },
+      "product": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      },
+      "unit": {
+        "name": "string",
+        "type": "boolean"
+      }
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Uom = AtomBase & {
+  aggregation_details: AggregationDetail;
+  /**
+   * Description of the UOM.
+   */
+  description?: string;
+  /**
+   * The list of dimensions that can be emitted along with the metering
+   * data.
+   *
+   */
+  dimensions?: string[];
+  /**
+   * If set to true, then the UOM can be configured as part of
+   * entitlements in skus and metering data only for the enabled uoms
+   * will be passed through the metering pipeline.
+   *
+   */
+  is_enabled: boolean;
+  /**
+   * Human readable metric name of the UOM.
+   */
+  metric_name: string;
+  /**
+   * The granularity at which the metrics ingestion data is to be emitted
+   * for the UOM.
+   *
+   */
+  metric_scope: "org" | "user";
+  /**
+   * Human readable name of the UOM.
+   */
+  name: string;
+  part?: PartSummary;
+  product: PartSummary;
+  unit: Unit;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type ProductSummary = PartBaseSummary;
+
+export interface UomsListResponse {
+  /**
+   * The cursor used to iterate subsequent results in accordance to the
+   * sort order. If not set, then no later elements exist.
+   *
+   */
+  next_cursor?: string;
+  /**
+   * The cursor used to iterate preceding results in accordance to the
+   * sort order. If not set, then no prior elements exist.
+   *
+   */
+  prev_cursor?: string;
+  /**
+   * The list of Unit of Measurement (UOM) objects.
+   */
+  uoms: Uom[];
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Stores aggregation type and dimension information.
+ */
+export interface AggregationDetail {
+  /**
+   * Aggregation type to be used while aggregating the metering data for the
+   * UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+   * { M1:2, M1:4 } => {M1:6} 2] Minimum - min of all the values for the
+   * meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+   * of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+   * {M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+   * the meter in the given period (not considering the data from the
+   * previous billing period) Ex. January {M1:{VM:VM0}}, February
+   * {M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+   * Sum of distinct active unique dimension observed for a meter in the
+   * given period, taking into consideration the active data from the
+   * previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+   * February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+   * 6] Duration - Sum of distinct active unique dimension duration for a
+   * meter in the given period, taking into consideration the active data
+   * from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+   * {M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+   * 30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+   * latest/last meter in the given period 8] Oldest - consider the
+   * oldest/first record in the given period.
+   *
+   */
+  aggregation_type: "duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count";
+  /**
+   * Unique dimension if provided to be considered for grouping metering
+   * data for the UOM.
+   *
+   */
+  unique_dimension?: string;
+}
+/**
+ * Unit encapsulates the name of the unit and the type of the unit. For
+ * example, '#Number of API calls' where name is 'number_of_api_calls' and
+ * type is 'number'.
+ *
+ */
+export interface Unit {
+  /**
+   * This represents human readable unit name of the UOM For example,
+   * number of API calls.
+   *
+   */
+  name: string;
+  /**
+   * This defines the UOM unit type. For example, for 'number of video
+   * calls', unit type will be a number.
+   *
+   */
+  type: "boolean" | "number";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/uoms.update"}>
+
+## uoms-update
+
+Updates a Unit of Measurement.
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"aggregation_type"} type={"string"}>
+
+{/* Aggregation type to be used while aggregating the metering data for the
+UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+{ M1:2, M1:4 } =\> {M1:6} 2] Minimum - min of all the values for the
+meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+{M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+the meter in the given period (not considering the data from the
+previous billing period) Ex. January {M1:{VM:VM0}}, February
+{M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+Sum of distinct active unique dimension observed for a meter in the
+given period, taking into consideration the active data from the
+previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+6] Duration - Sum of distinct active unique dimension duration for a
+meter in the given period, taking into consideration the active data
+from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+{M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+latest/last meter in the given period 8] Oldest - consider the
+oldest/first record in the given period. */}
+
+
+<span>Value in:  `"duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"description"} type={"string"}>
+
+Description of the Unit of Measurement (UOM).
+
+</Property>
+
+<Property required={false} deprecated={false} name={"dimensions"} type={"object"}>
+
+
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={false} deprecated={false} name={"add"} type={"array of string"}>
+
+Adds the provided dimensions to the UOM.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"remove"} type={"array of string"}>
+
+Removes the provided dimensions from the UOM.
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The Unit of Measurement (UOM)'s DON.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"is_enabled"} type={"boolean"}>
+
+Flag used to enable/disable the Unit of Measurement (UOM). When
+disabled, any metricsrecords ingested against this UOM will be
+dropped.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"name"} type={"string"}>
+
+Human readable name of the Unit of Measurement (UOM).
+
+</Property>
+
+<Property required={false} deprecated={false} name={"part_id"} type={"string"}>
+
+The part ID such as feature or capability for which the Unit of
+Measurement (UOM) is defined.
+
+
+<span>Example:  `"PROD-12345"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"product_id"} type={"string"}>
+
+The product ID for which the Unit of Measurement (UOM) is defined.
+
+
+<span>Example:  `"PROD-12345"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"unit"} type={"string"}>
+
+Unit name of the Unit of Measurement (UOM).
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/uoms.update" \
+  -d '{
+  "aggregation_type": "duration",
+  "description": "string",
+  "dimensions": {
+    "add": [
+      "string"
+    ],
+    "remove": [
+      "string"
+    ]
+  },
+  "id": "string",
+  "is_enabled": true,
+  "name": "string",
+  "part_id": "PROD-12345",
+  "product_id": "PROD-12345",
+  "unit": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "uom": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "aggregation_details": {
+      "aggregation_type": "duration",
+      "unique_dimension": "string"
+    },
+    "description": "string",
+    "dimensions": [
+      "string"
+    ],
+    "is_enabled": true,
+    "metric_name": "string",
+    "metric_scope": "org",
+    "name": "string",
+    "part": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "product": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "unit": {
+      "name": "string",
+      "type": "boolean"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Uom = AtomBase & {
+  aggregation_details: AggregationDetail;
+  /**
+   * Description of the UOM.
+   */
+  description?: string;
+  /**
+   * The list of dimensions that can be emitted along with the metering
+   * data.
+   *
+   */
+  dimensions?: string[];
+  /**
+   * If set to true, then the UOM can be configured as part of
+   * entitlements in skus and metering data only for the enabled uoms
+   * will be passed through the metering pipeline.
+   *
+   */
+  is_enabled: boolean;
+  /**
+   * Human readable metric name of the UOM.
+   */
+  metric_name: string;
+  /**
+   * The granularity at which the metrics ingestion data is to be emitted
+   * for the UOM.
+   *
+   */
+  metric_scope: "org" | "user";
+  /**
+   * Human readable name of the UOM.
+   */
+  name: string;
+  part?: PartSummary;
+  product: PartSummary;
+  unit: Unit;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type ProductSummary = PartBaseSummary;
+
+export interface UomsUpdateResponse {
+  uom: Uom;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Stores aggregation type and dimension information.
+ */
+export interface AggregationDetail {
+  /**
+   * Aggregation type to be used while aggregating the metering data for the
+   * UOM. 1] Sum - sum of all the values for the meter in a given period Ex.
+   * { M1:2, M1:4 } => {M1:6} 2] Minimum - min of all the values for the
+   * meter in a given period Ex. { M1:2, M1:4 } => {M1:2} 3] Maximum - max
+   * of all the values for the meter in a given period Ex. { M1:2, M1:4 } =>
+   * {M1:4} 4] Unique Count - Sum of distinct unique dimension observed for
+   * the meter in the given period (not considering the data from the
+   * previous billing period) Ex. January {M1:{VM:VM0}}, February
+   * {M1:{VM:VM1}, M1:{VM:VM2}, M1:{VM:VM1}} => {M1:2} 5] Running Total -
+   * Sum of distinct active unique dimension observed for a meter in the
+   * given period, taking into consideration the active data from the
+   * previous billing cycle Ex. January {M1:{VM:VM0,on}, {M1:{VM:VM1,off}
+   * February {M1:{VM:VM2, on}, M1:{VM:VM2, off}, M1:{VM:VM3, on}} => {M1:3}
+   * 6] Duration - Sum of distinct active unique dimension duration for a
+   * meter in the given period, taking into consideration the active data
+   * from the previous month Ex. January15 {M1:{VM:VM0,on, 4}} February15
+   * {M1:{VM:VM0,off}, February18 {M1:{VM:VM1,on,5} => M1->
+   * 30*4*charge_per_day + 10*5*charge_per_day 7] Latest - consider the
+   * latest/last meter in the given period 8] Oldest - consider the
+   * oldest/first record in the given period.
+   *
+   */
+  aggregation_type: "duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count";
+  /**
+   * Unique dimension if provided to be considered for grouping metering
+   * data for the UOM.
+   *
+   */
+  unique_dimension?: string;
+}
+/**
+ * Unit encapsulates the name of the unit and the type of the unit. For
+ * example, '#Number of API calls' where name is 'number_of_api_calls' and
+ * type is 'number'.
+ *
+ */
+export interface Unit {
+  /**
+   * This represents human readable unit name of the UOM For example,
+   * number of API calls.
+   *
+   */
+  name: string;
+  /**
+   * This defines the UOM unit type. For example, for 'number of video
+   * calls', unit type will be a number.
+   *
+   */
+  type: "boolean" | "number";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+</Root>

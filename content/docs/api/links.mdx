@@ -1,0 +1,3896 @@
+---
+title: links
+description: DevRev link interactions.
+toc: false
+---
+
+import { Root, API, APIInfo, APIExample, Property } from 'fumadocs-ui/components/api'
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs'
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Root>
+
+<API>
+
+<APIInfo method={"POST"} route={"/links.create"}>
+
+## links-create
+
+Creates a link between two objects to indicate a relationship.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"link_type"} type={"string"}>
+
+Type of link used to define the relationship.
+
+<span>Value in:  `"developed_with" | "imports" | "is_dependent_on" | "is_duplicate_of" | "is_parent_of" | "is_part_of" | "is_related_to" | "serves"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"source"} type={"string"}>
+
+The ID of the source object.
+
+</Property>
+
+<Property required={true} deprecated={false} name={"target"} type={"string"}>
+
+The ID of the target object.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `201` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/links.create" \
+  -d '{
+  "link_type": "developed_with",
+  "source": "string",
+  "target": "string"
+}'
+```
+
+<Tabs items={["201","400","401","403","429","500","503"]}>
+
+<Tab value={"201"}>
+
+The response to creating a new link.
+
+```json title="Example Response"
+{
+  "link": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "link_type": "developed_with",
+    "source": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "target": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Link = AtomBase & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+
+/**
+ * The response to creating a new link.
+ */
+export interface LinksCreateResponse {
+  link: Link;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/links.delete"}>
+
+## links-delete
+
+Deletes a link.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The ID of the link to delete.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/links.delete" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response for deleting a link.
+
+```json title="Example Response"
+{}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * The response for deleting a link.
+ */
+export interface LinksDeleteResponse {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/links.get"}>
+
+## links-get
+
+Gets the requested link's information.
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The requested link's ID.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/links.get"
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to getting a link's information.
+
+```json title="Example Response"
+{
+  "link": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "link_type": "developed_with",
+    "source": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "target": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Link = AtomBase & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+
+/**
+ * The response to getting a link's information.
+ */
+export interface LinksGetResponse {
+  link: Link;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/links.get"}>
+
+## links-get-post
+
+Gets the requested link's information.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The requested link's ID.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/links.get" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to getting a link's information.
+
+```json title="Example Response"
+{
+  "link": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "link_type": "developed_with",
+    "source": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    },
+    "target": {
+      "type": "capability",
+      "display_id": "string",
+      "id": "string",
+      "name": "string"
+    }
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Link = AtomBase & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+
+/**
+ * The response to getting a link's information.
+ */
+export interface LinksGetResponse {
+  link: Link;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/links.list"}>
+
+## links-list
+
+Lists the available links.
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"object"} type={"string"}>
+
+The ID of the object to list the links for.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"cursor"} type={"string"}>
+
+The cursor to resume iteration from. If not provided, then iteration
+starts from the beginning.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"direction"} type={"string"}>
+
+The direction of the links to list, otherwise if not present, then
+links in both directions (source and target) are included.
+
+
+<span>Value in:  `"is_source" | "is_target"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of links to return. If not set, then the default
+is '50'.
+
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"link_type"} type={"array of string"}>
+
+The link type(s) to filter for, otherwise if not present, all link
+types are included.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"mode"} type={"string"}>
+
+The iteration mode to use, otherwise if not set, then "after" is
+used.
+
+
+<span>Value in:  `"after" | "before"`</span>
+
+</Property>
+
+<Property required={false} deprecated={true} name={"types"} type={"array of string"}>
+
+The link types to filter for, otherwise if not present, all link
+types are included.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/links.list"
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to listing the links.
+
+```json title="Example Response"
+{
+  "links": [
+    {
+      "created_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "created_date": "2023-01-01T12:00:00.000Z",
+      "display_id": "string",
+      "id": "string",
+      "modified_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "link_type": "developed_with",
+      "source": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      },
+      "target": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      }
+    }
+  ],
+  "next_cursor": "string",
+  "prev_cursor": "string"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Link = AtomBase & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+
+/**
+ * The response to listing the links.
+ */
+export interface LinksListResponse {
+  /**
+   * The list of links.
+   */
+  links: Link[];
+  /**
+   * The cursor used to iterate subsequent results in accordance to the
+   * sort order. If not set, then no later elements exist.
+   *
+   */
+  next_cursor?: string;
+  /**
+   * The cursor used to iterate preceding results in accordance to the
+   * sort order. If not set, then no prior elements exist.
+   *
+   */
+  prev_cursor?: string;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/links.list"}>
+
+## links-list-post
+
+Lists the available links.
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"cursor"} type={"string"}>
+
+The cursor to resume iteration from. If not provided, then
+iteration starts from the beginning.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"direction"} type={"string"}>
+
+The direction of link, which can either be outbound such that the
+object is the source of the link, otherwise inbound where the object is
+the target of the link.
+
+
+<span>Value in:  `"is_source" | "is_target"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of links to return. If not set, then the default
+is '50'.
+
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"link_type"} type={"array of string"}>
+
+The link type(s) to filter for, otherwise if not present, all link
+types are included.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"mode"} type={"string"}>
+
+The iteration mode to use. If "after", then entries after the provided
+cursor will be returned, or if no cursor is provided, then from the
+beginning. If "before", then entries before the provided cursor will be
+returned, or if no cursor is provided, then from the end. Entries will
+always be returned in the specified sort-by order.
+
+
+<span>Value in:  `"after" | "before"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"object"} type={"string"}>
+
+The ID of the object to list the links for.
+
+</Property>
+
+<Property required={false} deprecated={true} name={"types"} type={"array of string"}>
+
+The link types to filter for, otherwise if not present, all link
+types are included.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/links.list" \
+  -d '{
+  "cursor": "string",
+  "direction": "is_source",
+  "limit": 0,
+  "link_type": [
+    "developed_with"
+  ],
+  "mode": "after",
+  "object": "string",
+  "types": [
+    "developed_with"
+  ]
+}'
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to listing the links.
+
+```json title="Example Response"
+{
+  "links": [
+    {
+      "created_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "created_date": "2023-01-01T12:00:00.000Z",
+      "display_id": "string",
+      "id": "string",
+      "modified_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "link_type": "developed_with",
+      "source": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      },
+      "target": {
+        "type": "capability",
+        "display_id": "string",
+        "id": "string",
+        "name": "string"
+      }
+    }
+  ],
+  "next_cursor": "string",
+  "prev_cursor": "string"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type Link = AtomBase & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+
+/**
+ * The response to listing the links.
+ */
+export interface LinksListResponse {
+  /**
+   * The list of links.
+   */
+  links: Link[];
+  /**
+   * The cursor used to iterate subsequent results in accordance to the
+   * sort order. If not set, then no later elements exist.
+   *
+   */
+  next_cursor?: string;
+  /**
+   * The cursor used to iterate preceding results in accordance to the
+   * sort order. If not set, then no prior elements exist.
+   *
+   */
+  prev_cursor?: string;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+</Root>

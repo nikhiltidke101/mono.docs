@@ -1,0 +1,3141 @@
+---
+title: search
+description: DevRev search.
+toc: false
+---
+
+import { Root, API, APIInfo, APIExample, Property } from 'fumadocs-ui/components/api'
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs'
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Root>
+
+<API>
+
+<APIInfo method={"GET"} route={"/search.core"}>
+
+## search-core
+
+Searches for records based on a given query.
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"query"} type={"string"}>
+
+The query string. Search query language:
+https://docs.devrev.ai/product/search#fields
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"cursor"} type={"string"}>
+
+The cursor from where to begin iteration. Start from beginning if not
+provided.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of items to return in a page. The default is '10'.
+
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"namespaces"} type={"array of string"}>
+
+The namespaces to search in.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"sort_by"} type={"string"}>
+
+The property on which to sort the search results. The default is
+RELEVANCE.
+
+
+<span>Value in:  `"created_date" | "modified_date" | "relevance"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"sort_order"} type={"string"}>
+
+Sorting order. The default is DESCENDING.
+
+<span>Value in:  `"asc" | "desc"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/search.core"
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Search response.
+
+```json title="Example Response"
+{
+  "cursor": "string",
+  "results": [
+    {
+      "type": "account",
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "snippet": "string",
+      "account": {
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string"
+      }
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type SearchResult =
+  | AccountSearchSummary
+  | ArticleSearchSummary
+  | ArtifactSearchSummary
+  | ConversationSearchSummary
+  | CustomObjectSearchSummary
+  | DashboardSearchSummary
+  | GroupSearchSummary
+  | LinkSearchSummary
+  | ObjectMemberSearchSummary
+  | OrgSearchSummary
+  | PartSearchSummary
+  | QuestionAnswerSearchSummary
+  | TagSearchSummary
+  | UserSearchSummary
+  | VistaSearchSummary
+  | WorkSearchSummary;
+export type AccountSearchSummary = SearchSummaryBase & {
+  account: AccountSummary;
+};
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type ArticleSearchSummary = SearchSummaryBase & {
+  article: ArticleSummary;
+};
+export type ArticleSummary = AtomBaseSummary & {
+  resource?: ResourceSummary;
+  /**
+   * Title of the article.
+   */
+  title?: string;
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type ArtifactSearchSummary = SearchSummaryBase & {
+  artifact: ArtifactSummary;
+};
+export type ConversationSearchSummary = SearchSummaryBase & {
+  conversation: ConversationSummary;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type CustomObjectSearchSummary = SearchSummaryBase & {
+  custom_object: CustomObjectSummary;
+};
+export type CustomObjectSummary = AtomBaseSummary;
+export type DashboardSearchSummary = SearchSummaryBase & {
+  dashboard: DashboardSummary;
+};
+export type DashboardSummary = AtomBaseSummary;
+export type GroupSearchSummary = SearchSummaryBase & {
+  group: GroupSummary;
+};
+export type GroupSummary = AtomBaseSummary & {
+  /**
+   * Type of the members in the group.
+   */
+  member_type?: "dev_user" | "rev_user";
+  /**
+   * Name of the group.
+   */
+  name?: string;
+};
+export type LinkSearchSummary = SearchSummaryBase & {
+  link: LinkSummary;
+};
+export type LinkSummary = AtomBaseSummary & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+export type ObjectMemberSearchSummary = SearchSummaryBase & {
+  object_member: ObjectMemberSummary;
+};
+export type ObjectMemberSummary = AtomBaseSummary;
+export type OrgSearchSummary = SearchSummaryBase & {
+  org: OrgSummary;
+};
+export type PartSearchSummary = SearchSummaryBase & {
+  part: PartSummary;
+};
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type QuestionAnswerSearchSummary = SearchSummaryBase & {
+  question_answer: QuestionAnswerSummary;
+};
+export type QuestionAnswerSummary = AtomBaseSummary & {
+  /**
+   * The Question.
+   */
+  question?: string;
+};
+export type TagSearchSummary = SearchSummaryBase & {
+  tag: TagSummary;
+};
+export type TagSummary = AtomBaseSummary & {
+  /**
+   * The name of the tag, which denotes the logical concept by which all
+   * tagged objects will be associated. The name is guaranteed to be
+   * unique.
+   *
+   */
+  name: string;
+};
+export type UserSearchSummary = SearchSummaryBase & {
+  user: UserSummary;
+};
+export type VistaSearchSummary = SearchSummaryBase & {
+  vista: VistaSummary;
+};
+/**
+ * Represents a collection of DevRev objects.
+ */
+export type VistaSummary = CuratedVistaSummary | DynamicVistaSummary | GroupedVistaSummary;
+/**
+ * Static collection of Devrev objects.
+ */
+export type CuratedVistaSummary = VistaBaseSummary;
+export type VistaBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the vista.
+   */
+  name: string;
+};
+/**
+ * Dynamic collection of Devrev objects, all adhering to a specific
+ * filter.
+ *
+ */
+export type DynamicVistaSummary = VistaBaseSummary;
+/**
+ * Represents a group of multiple vistas as a single unit.
+ */
+export type GroupedVistaSummary = VistaBaseSummary & {
+  /**
+   * Denotes the use case of the grouped vista.
+   */
+  flavor?: "nnl" | "sprint_board" | "support_inbox";
+};
+export type WorkSearchSummary = SearchSummaryBase & {
+  work: WorkSummary;
+};
+export type WorkSummary = IssueSummary | OpportunitySummary | TaskSummary | TicketSummary;
+
+/**
+ * Search response.
+ */
+export interface SearchCoreResponse {
+  /**
+   * The cursor from where to begin iteration. Start from beginning if
+   * not provided.
+   *
+   */
+  cursor?: string;
+  /**
+   * The search results.
+   */
+  results: SearchResult[];
+}
+export interface SearchSummaryBase {
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+  /**
+   * Text snippet where the search hit occurred.
+   */
+  snippet?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Resource details.
+ */
+export interface ResourceSummary {
+  /**
+   * Ids of the artifacts.
+   */
+  artifacts?: ArtifactSummary[];
+  /**
+   * URL of the external article.
+   */
+  url?: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/search.core"}>
+
+## search-core-post
+
+Searches for records based on a given query.
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"cursor"} type={"string"}>
+
+The cursor from where to begin iteration. Start from beginning if
+not provided.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of items to return in a page. The default is
+'10'.
+
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"namespaces"} type={"array of string"}>
+
+The namespaces to search in.
+
+</Property>
+
+<Property required={true} deprecated={false} name={"query"} type={"string"}>
+
+The query string. Search query language:
+https://docs.devrev.ai/product/search#fields
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"sort_by"} type={"string"}>
+
+Search sort by parameters.
+
+<span>Value in:  `"created_date" | "modified_date" | "relevance"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"sort_order"} type={"string"}>
+
+Search sort order parameters.
+
+<span>Value in:  `"asc" | "desc"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/search.core" \
+  -d '{
+  "cursor": "string",
+  "limit": 0,
+  "namespaces": [
+    "account"
+  ],
+  "query": "string",
+  "sort_by": "created_date",
+  "sort_order": "asc"
+}'
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Search response.
+
+```json title="Example Response"
+{
+  "cursor": "string",
+  "results": [
+    {
+      "type": "account",
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "snippet": "string",
+      "account": {
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string"
+      }
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type SearchResult =
+  | AccountSearchSummary
+  | ArticleSearchSummary
+  | ArtifactSearchSummary
+  | ConversationSearchSummary
+  | CustomObjectSearchSummary
+  | DashboardSearchSummary
+  | GroupSearchSummary
+  | LinkSearchSummary
+  | ObjectMemberSearchSummary
+  | OrgSearchSummary
+  | PartSearchSummary
+  | QuestionAnswerSearchSummary
+  | TagSearchSummary
+  | UserSearchSummary
+  | VistaSearchSummary
+  | WorkSearchSummary;
+export type AccountSearchSummary = SearchSummaryBase & {
+  account: AccountSummary;
+};
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type ArticleSearchSummary = SearchSummaryBase & {
+  article: ArticleSummary;
+};
+export type ArticleSummary = AtomBaseSummary & {
+  resource?: ResourceSummary;
+  /**
+   * Title of the article.
+   */
+  title?: string;
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type ArtifactSearchSummary = SearchSummaryBase & {
+  artifact: ArtifactSummary;
+};
+export type ConversationSearchSummary = SearchSummaryBase & {
+  conversation: ConversationSummary;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type CustomObjectSearchSummary = SearchSummaryBase & {
+  custom_object: CustomObjectSummary;
+};
+export type CustomObjectSummary = AtomBaseSummary;
+export type DashboardSearchSummary = SearchSummaryBase & {
+  dashboard: DashboardSummary;
+};
+export type DashboardSummary = AtomBaseSummary;
+export type GroupSearchSummary = SearchSummaryBase & {
+  group: GroupSummary;
+};
+export type GroupSummary = AtomBaseSummary & {
+  /**
+   * Type of the members in the group.
+   */
+  member_type?: "dev_user" | "rev_user";
+  /**
+   * Name of the group.
+   */
+  name?: string;
+};
+export type LinkSearchSummary = SearchSummaryBase & {
+  link: LinkSummary;
+};
+export type LinkSummary = AtomBaseSummary & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+export type ObjectMemberSearchSummary = SearchSummaryBase & {
+  object_member: ObjectMemberSummary;
+};
+export type ObjectMemberSummary = AtomBaseSummary;
+export type OrgSearchSummary = SearchSummaryBase & {
+  org: OrgSummary;
+};
+export type PartSearchSummary = SearchSummaryBase & {
+  part: PartSummary;
+};
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type QuestionAnswerSearchSummary = SearchSummaryBase & {
+  question_answer: QuestionAnswerSummary;
+};
+export type QuestionAnswerSummary = AtomBaseSummary & {
+  /**
+   * The Question.
+   */
+  question?: string;
+};
+export type TagSearchSummary = SearchSummaryBase & {
+  tag: TagSummary;
+};
+export type TagSummary = AtomBaseSummary & {
+  /**
+   * The name of the tag, which denotes the logical concept by which all
+   * tagged objects will be associated. The name is guaranteed to be
+   * unique.
+   *
+   */
+  name: string;
+};
+export type UserSearchSummary = SearchSummaryBase & {
+  user: UserSummary;
+};
+export type VistaSearchSummary = SearchSummaryBase & {
+  vista: VistaSummary;
+};
+/**
+ * Represents a collection of DevRev objects.
+ */
+export type VistaSummary = CuratedVistaSummary | DynamicVistaSummary | GroupedVistaSummary;
+/**
+ * Static collection of Devrev objects.
+ */
+export type CuratedVistaSummary = VistaBaseSummary;
+export type VistaBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the vista.
+   */
+  name: string;
+};
+/**
+ * Dynamic collection of Devrev objects, all adhering to a specific
+ * filter.
+ *
+ */
+export type DynamicVistaSummary = VistaBaseSummary;
+/**
+ * Represents a group of multiple vistas as a single unit.
+ */
+export type GroupedVistaSummary = VistaBaseSummary & {
+  /**
+   * Denotes the use case of the grouped vista.
+   */
+  flavor?: "nnl" | "sprint_board" | "support_inbox";
+};
+export type WorkSearchSummary = SearchSummaryBase & {
+  work: WorkSummary;
+};
+export type WorkSummary = IssueSummary | OpportunitySummary | TaskSummary | TicketSummary;
+
+/**
+ * Search response.
+ */
+export interface SearchCoreResponse {
+  /**
+   * The cursor from where to begin iteration. Start from beginning if
+   * not provided.
+   *
+   */
+  cursor?: string;
+  /**
+   * The search results.
+   */
+  results: SearchResult[];
+}
+export interface SearchSummaryBase {
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+  /**
+   * Text snippet where the search hit occurred.
+   */
+  snippet?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Resource details.
+ */
+export interface ResourceSummary {
+  /**
+   * Ids of the artifacts.
+   */
+  artifacts?: ArtifactSummary[];
+  /**
+   * URL of the external article.
+   */
+  url?: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/search.hybrid"}>
+
+## search-hybrid
+
+Performs search, using a combination of syntactic and semantic search.
+
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"namespace"} type={"string"}>
+
+The hybrid namespace to search in.
+
+<span>Value in:  `"article" | "conversation" | "issue" | "part" | "question_answer" | "ticket" | "work"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"query"} type={"string"}>
+
+The query string.
+
+<span>Minimum length:  `1`</span>
+
+<span>Maximum length:  `400`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of items to return in a page. The default is '10'.
+
+
+<span>Minimum:  `0`</span>
+
+<span>Maximum:  `50`</span>
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"semantic_weight"} type={"number"}>
+
+The weightage for semantic search. Values between 0 and 1 are
+accepted.
+
+
+<span>Minimum:  `0`</span>
+
+<span>Maximum:  `1`</span>
+
+<span>Format:  `"float"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/search.hybrid"
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Hybrid search response.
+
+```json title="Example Response"
+{
+  "results": [
+    {
+      "type": "account",
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "snippet": "string",
+      "account": {
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string"
+      }
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type SearchResult =
+  | AccountSearchSummary
+  | ArticleSearchSummary
+  | ArtifactSearchSummary
+  | ConversationSearchSummary
+  | CustomObjectSearchSummary
+  | DashboardSearchSummary
+  | GroupSearchSummary
+  | LinkSearchSummary
+  | ObjectMemberSearchSummary
+  | OrgSearchSummary
+  | PartSearchSummary
+  | QuestionAnswerSearchSummary
+  | TagSearchSummary
+  | UserSearchSummary
+  | VistaSearchSummary
+  | WorkSearchSummary;
+export type AccountSearchSummary = SearchSummaryBase & {
+  account: AccountSummary;
+};
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type ArticleSearchSummary = SearchSummaryBase & {
+  article: ArticleSummary;
+};
+export type ArticleSummary = AtomBaseSummary & {
+  resource?: ResourceSummary;
+  /**
+   * Title of the article.
+   */
+  title?: string;
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type ArtifactSearchSummary = SearchSummaryBase & {
+  artifact: ArtifactSummary;
+};
+export type ConversationSearchSummary = SearchSummaryBase & {
+  conversation: ConversationSummary;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type CustomObjectSearchSummary = SearchSummaryBase & {
+  custom_object: CustomObjectSummary;
+};
+export type CustomObjectSummary = AtomBaseSummary;
+export type DashboardSearchSummary = SearchSummaryBase & {
+  dashboard: DashboardSummary;
+};
+export type DashboardSummary = AtomBaseSummary;
+export type GroupSearchSummary = SearchSummaryBase & {
+  group: GroupSummary;
+};
+export type GroupSummary = AtomBaseSummary & {
+  /**
+   * Type of the members in the group.
+   */
+  member_type?: "dev_user" | "rev_user";
+  /**
+   * Name of the group.
+   */
+  name?: string;
+};
+export type LinkSearchSummary = SearchSummaryBase & {
+  link: LinkSummary;
+};
+export type LinkSummary = AtomBaseSummary & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+export type ObjectMemberSearchSummary = SearchSummaryBase & {
+  object_member: ObjectMemberSummary;
+};
+export type ObjectMemberSummary = AtomBaseSummary;
+export type OrgSearchSummary = SearchSummaryBase & {
+  org: OrgSummary;
+};
+export type PartSearchSummary = SearchSummaryBase & {
+  part: PartSummary;
+};
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type QuestionAnswerSearchSummary = SearchSummaryBase & {
+  question_answer: QuestionAnswerSummary;
+};
+export type QuestionAnswerSummary = AtomBaseSummary & {
+  /**
+   * The Question.
+   */
+  question?: string;
+};
+export type TagSearchSummary = SearchSummaryBase & {
+  tag: TagSummary;
+};
+export type TagSummary = AtomBaseSummary & {
+  /**
+   * The name of the tag, which denotes the logical concept by which all
+   * tagged objects will be associated. The name is guaranteed to be
+   * unique.
+   *
+   */
+  name: string;
+};
+export type UserSearchSummary = SearchSummaryBase & {
+  user: UserSummary;
+};
+export type VistaSearchSummary = SearchSummaryBase & {
+  vista: VistaSummary;
+};
+/**
+ * Represents a collection of DevRev objects.
+ */
+export type VistaSummary = CuratedVistaSummary | DynamicVistaSummary | GroupedVistaSummary;
+/**
+ * Static collection of Devrev objects.
+ */
+export type CuratedVistaSummary = VistaBaseSummary;
+export type VistaBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the vista.
+   */
+  name: string;
+};
+/**
+ * Dynamic collection of Devrev objects, all adhering to a specific
+ * filter.
+ *
+ */
+export type DynamicVistaSummary = VistaBaseSummary;
+/**
+ * Represents a group of multiple vistas as a single unit.
+ */
+export type GroupedVistaSummary = VistaBaseSummary & {
+  /**
+   * Denotes the use case of the grouped vista.
+   */
+  flavor?: "nnl" | "sprint_board" | "support_inbox";
+};
+export type WorkSearchSummary = SearchSummaryBase & {
+  work: WorkSummary;
+};
+export type WorkSummary = IssueSummary | OpportunitySummary | TaskSummary | TicketSummary;
+
+/**
+ * Hybrid search response.
+ */
+export interface SearchHybridResponse {
+  /**
+   * The search results.
+   */
+  results: SearchResult[];
+}
+export interface SearchSummaryBase {
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+  /**
+   * Text snippet where the search hit occurred.
+   */
+  snippet?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Resource details.
+ */
+export interface ResourceSummary {
+  /**
+   * Ids of the artifacts.
+   */
+  artifacts?: ArtifactSummary[];
+  /**
+   * URL of the external article.
+   */
+  url?: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/search.hybrid"}>
+
+## search-hybrid-post
+
+Performs search, using a combination of syntactic and semantic search.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"limit"} type={"integer"}>
+
+The maximum number of items to return in a page. The default is
+'10'.
+
+
+<span>Minimum:  `0`</span>
+
+<span>Maximum:  `50`</span>
+
+<span>Format:  `"int32"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"namespace"} type={"string"}>
+
+The namespaces for hybrid search.
+
+<span>Value in:  `"article" | "conversation" | "issue" | "part" | "question_answer" | "ticket" | "work"`</span>
+
+</Property>
+
+<Property required={true} deprecated={false} name={"query"} type={"string"}>
+
+The query string.
+
+<span>Minimum length:  `1`</span>
+
+<span>Maximum length:  `400`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"semantic_weight"} type={"number"}>
+
+The weightage for semantic search. Values between 0 and 1 are
+accepted.
+
+
+<span>Minimum:  `0`</span>
+
+<span>Maximum:  `1`</span>
+
+<span>Format:  `"float"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/search.hybrid" \
+  -d '{
+  "limit": 50,
+  "namespace": "article",
+  "query": "string",
+  "semantic_weight": 1
+}'
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Hybrid search response.
+
+```json title="Example Response"
+{
+  "results": [
+    {
+      "type": "account",
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "snippet": "string",
+      "account": {
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string"
+      }
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type SearchResult =
+  | AccountSearchSummary
+  | ArticleSearchSummary
+  | ArtifactSearchSummary
+  | ConversationSearchSummary
+  | CustomObjectSearchSummary
+  | DashboardSearchSummary
+  | GroupSearchSummary
+  | LinkSearchSummary
+  | ObjectMemberSearchSummary
+  | OrgSearchSummary
+  | PartSearchSummary
+  | QuestionAnswerSearchSummary
+  | TagSearchSummary
+  | UserSearchSummary
+  | VistaSearchSummary
+  | WorkSearchSummary;
+export type AccountSearchSummary = SearchSummaryBase & {
+  account: AccountSummary;
+};
+export type AccountSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type ArticleSearchSummary = SearchSummaryBase & {
+  article: ArticleSummary;
+};
+export type ArticleSummary = AtomBaseSummary & {
+  resource?: ResourceSummary;
+  /**
+   * Title of the article.
+   */
+  title?: string;
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type ArtifactSearchSummary = SearchSummaryBase & {
+  artifact: ArtifactSummary;
+};
+export type ConversationSearchSummary = SearchSummaryBase & {
+  conversation: ConversationSummary;
+};
+export type ConversationSummary = AtomBaseSummary & {
+  /**
+   * Title of the conversation object.
+   */
+  title?: string;
+};
+export type CustomObjectSearchSummary = SearchSummaryBase & {
+  custom_object: CustomObjectSummary;
+};
+export type CustomObjectSummary = AtomBaseSummary;
+export type DashboardSearchSummary = SearchSummaryBase & {
+  dashboard: DashboardSummary;
+};
+export type DashboardSummary = AtomBaseSummary;
+export type GroupSearchSummary = SearchSummaryBase & {
+  group: GroupSummary;
+};
+export type GroupSummary = AtomBaseSummary & {
+  /**
+   * Type of the members in the group.
+   */
+  member_type?: "dev_user" | "rev_user";
+  /**
+   * Name of the group.
+   */
+  name?: string;
+};
+export type LinkSearchSummary = SearchSummaryBase & {
+  link: LinkSummary;
+};
+export type LinkSummary = AtomBaseSummary & {
+  /**
+   * Type of link used to define the relationship.
+   */
+  link_type:
+    | "developed_with"
+    | "imports"
+    | "is_dependent_on"
+    | "is_duplicate_of"
+    | "is_parent_of"
+    | "is_part_of"
+    | "is_related_to"
+    | "serves";
+  source: LinkEndpointSummary;
+  target: LinkEndpointSummary;
+};
+export type LinkEndpointSummary =
+  | CapabilitySummary
+  | ConversationSummary
+  | EnhancementSummary
+  | FeatureSummary
+  | IssueSummary
+  | OpportunitySummary
+  | ProductSummary
+  | TaskSummary
+  | TicketSummary;
+export type CapabilitySummary = PartBaseSummary;
+export type PartBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the part.
+   */
+  name: string;
+};
+export type EnhancementSummary = PartBaseSummary;
+export type FeatureSummary = PartBaseSummary;
+export type IssueSummary = WorkBaseSummary & {
+  /**
+   * Priority of the work based upon impact and criticality.
+   */
+  priority?: "p0" | "p1" | "p2" | "p3";
+};
+export type WorkBaseSummary = AtomBaseSummary & {
+  /**
+   * The users that own the work.
+   */
+  owned_by: UserSummary[];
+  stage?: LegacyStageSummary;
+  /**
+   * Title of the work object.
+   */
+  title: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | ServiceAccountSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = AccountSummary | RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type ServiceAccountSummary = UserBaseSummary;
+export type SysUserSummary = UserBaseSummary;
+export type OpportunitySummary = WorkBaseSummary;
+export type ProductSummary = PartBaseSummary;
+export type TaskSummary = WorkBaseSummary;
+export type TicketSummary = WorkBaseSummary & {
+  rev_org?: OrgSummary;
+  /**
+   * Severity of the ticket.
+   */
+  severity?: "blocker" | "high" | "low" | "medium";
+};
+export type ObjectMemberSearchSummary = SearchSummaryBase & {
+  object_member: ObjectMemberSummary;
+};
+export type ObjectMemberSummary = AtomBaseSummary;
+export type OrgSearchSummary = SearchSummaryBase & {
+  org: OrgSummary;
+};
+export type PartSearchSummary = SearchSummaryBase & {
+  part: PartSummary;
+};
+export type PartSummary = CapabilitySummary | EnhancementSummary | FeatureSummary | ProductSummary;
+export type QuestionAnswerSearchSummary = SearchSummaryBase & {
+  question_answer: QuestionAnswerSummary;
+};
+export type QuestionAnswerSummary = AtomBaseSummary & {
+  /**
+   * The Question.
+   */
+  question?: string;
+};
+export type TagSearchSummary = SearchSummaryBase & {
+  tag: TagSummary;
+};
+export type TagSummary = AtomBaseSummary & {
+  /**
+   * The name of the tag, which denotes the logical concept by which all
+   * tagged objects will be associated. The name is guaranteed to be
+   * unique.
+   *
+   */
+  name: string;
+};
+export type UserSearchSummary = SearchSummaryBase & {
+  user: UserSummary;
+};
+export type VistaSearchSummary = SearchSummaryBase & {
+  vista: VistaSummary;
+};
+/**
+ * Represents a collection of DevRev objects.
+ */
+export type VistaSummary = CuratedVistaSummary | DynamicVistaSummary | GroupedVistaSummary;
+/**
+ * Static collection of Devrev objects.
+ */
+export type CuratedVistaSummary = VistaBaseSummary;
+export type VistaBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the vista.
+   */
+  name: string;
+};
+/**
+ * Dynamic collection of Devrev objects, all adhering to a specific
+ * filter.
+ *
+ */
+export type DynamicVistaSummary = VistaBaseSummary;
+/**
+ * Represents a group of multiple vistas as a single unit.
+ */
+export type GroupedVistaSummary = VistaBaseSummary & {
+  /**
+   * Denotes the use case of the grouped vista.
+   */
+  flavor?: "nnl" | "sprint_board" | "support_inbox";
+};
+export type WorkSearchSummary = SearchSummaryBase & {
+  work: WorkSummary;
+};
+export type WorkSummary = IssueSummary | OpportunitySummary | TaskSummary | TicketSummary;
+
+/**
+ * Hybrid search response.
+ */
+export interface SearchHybridResponse {
+  /**
+   * The search results.
+   */
+  results: SearchResult[];
+}
+export interface SearchSummaryBase {
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+  /**
+   * Text snippet where the search hit occurred.
+   */
+  snippet?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Resource details.
+ */
+export interface ResourceSummary {
+  /**
+   * Ids of the artifacts.
+   */
+  artifacts?: ArtifactSummary[];
+  /**
+   * URL of the external article.
+   */
+  url?: string;
+}
+/**
+ * Describes the current stage of a work item.
+ */
+export interface LegacyStageSummary {
+  /**
+   * Current stage name of the work item.
+   */
+  name: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "artifact_already_attached_to_a_parent",
+  "existing_parent": "string",
+  "is_same": true
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestArtifactAlreadyAttachedToAParent
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestArtifactAlreadyAttachedToAParent {
+  /**
+   * The existing parent attached to the artifact.
+   */
+  existing_parent: string;
+  /**
+   * Whether the existing parent is the same as the new parent.
+   *
+   */
+  is_same: boolean;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+</Root>
