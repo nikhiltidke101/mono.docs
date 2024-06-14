@@ -1,7 +1,7 @@
 import * as OpenAPI from 'fumadocs-openapi';
  
 void OpenAPI.generateFiles({
-  input: ['./*.yaml'],
+  input: ['./openapi/*.yaml'],
   output: './content/',
   per: 'tag',
   render: (title, description) => {

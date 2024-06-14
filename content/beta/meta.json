@@ -1,0 +1,5 @@
+{
+  "title": "Beta",
+  "root": true,
+  "pages": ["---About---", "index",  "---API Reference---", "..."]
+}

@@ -1,0 +1,4868 @@
+---
+title: auth-tokens
+description: Security token interactions.
+toc: false
+---
+
+import { Root, API, APIInfo, APIExample, Property } from 'fumadocs-ui/components/api'
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs'
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Root>
+
+<API>
+
+<APIInfo method={"POST"} route={"/auth-tokens.create"}>
+
+## auth-tokens-create
+
+Creates a JWT corresponding to the requested token type for the
+authenticated user.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"act_as"} type={"string"}>
+
+The unique ID of the Dev user or the service account to
+impersonate.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"aud"} type={"array of string"}>
+
+The expected audience values with respect to the token.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"client_id"} type={"string"}>
+
+An identifier that represents the application which is requesting
+the token. If no client_id is present in the request to generate an
+application access token (AAT), DevRev will generate a client_id.
+This client_id is only associated with an AAT.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"expires_in"} type={"integer"}>
+
+The expected validity lifetime of the token in number of days. In
+practice, the value should be based on the usage of the token.
+
+
+<span>Minimum:  `0`</span>
+
+<span>Maximum:  `4294967295`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"grant_type"} type={"string"}>
+
+Specifies the process of obtaining a token.
+
+<span>Value in:  `"urn:devrev:params:oauth:grant-type:token-issue" | "urn:ietf:params:oauth:grant-type:token-exchange"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"requested_token_type"} type={"string"}>
+
+The type of the requested token.
+
+<span>Value in:  `"urn:devrev:params:oauth:token-type:aat" | "urn:devrev:params:oauth:token-type:aat:act-as" | "urn:devrev:params:oauth:token-type:aat:public" | "urn:devrev:params:oauth:token-type:dev" | "urn:devrev:params:oauth:token-type:dev:connect" | "urn:devrev:params:oauth:token-type:gat" | "urn:devrev:params:oauth:token-type:pat" | "urn:devrev:params:oauth:token-type:pat:act-as" | "urn:devrev:params:oauth:token-type:rat" | "urn:devrev:params:oauth:token-type:rev" | "urn:devrev:params:oauth:token-type:session" | "urn:devrev:params:oauth:token-type:session:dev0" | "urn:devrev:params:oauth:token-type:session:onetime" | "urn:devrev:params:oauth:token-type:session:rev:act-as" | "urn:devrev:params:oauth:token-type:super" | "urn:devrev:params:oauth:token-type:sys" | "urn:ietf:params:oauth:token-type:jwt"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"rev_info"} type={"object"}>
+
+Carries info corresponding to the Rev user to be provisioned and/or
+issue a Rev session token.
+
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={false} deprecated={false} name={"org_ref"} type={"string"}>
+
+An identifier which uniquely identifies a Rev org.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"org_traits"} type={"object"}>
+
+Carries Rev org info.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={false} deprecated={false} name={"custom_fields"} type={"object"}>
+
+Application-defined custom fields of the Rev org.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"description"} type={"string"}>
+
+The description of the Rev org.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"display_name"} type={"string"}>
+
+The display name of the Rev org.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"domain"} type={"string"}>
+
+The domain of the Rev org.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"phone_numbers"} type={"array of string"}>
+
+Phone numbers of the Rev org.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"tier"} type={"string"}>
+
+The tier of the Rev org.
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"user_id"} type={"string"}>
+
+The unique ID of the Rev user.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"user_ref"} type={"string"}>
+
+An identifier which uniquely identifies a Rev user.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"user_traits"} type={"object"}>
+
+Carries Rev user info.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+<Property required={false} deprecated={false} name={"custom_fields"} type={"object"}>
+
+Application-defined custom fields of the Rev user.
+
+<Accordions>
+
+<Accordion title={"Object Type"}>
+
+
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"description"} type={"string"}>
+
+The description of the Rev user.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"display_name"} type={"string"}>
+
+The display name of the Rev user.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"email"} type={"string"}>
+
+The email address of the Rev user.
+
+</Property>
+
+<Property required={false} deprecated={true} name={"full_name"} type={"string"}>
+
+The full name of the Rev user.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"phone_numbers"} type={"array of string"}>
+
+Phone numbers of the Rev user.
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+</Accordion>
+
+</Accordions>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"scope"} type={"string"}>
+
+The requested set of scopes associated with the issued token. A
+space-delimited list of values in which the order of values does
+not matter.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"subject_token"} type={"string"}>
+
+Represents the entity that requests the token. Not required when
+requesting an application access token (AAT).
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"subject_token_type"} type={"string"}>
+
+The type of the subject token.
+
+<span>Value in:  `"urn:devrev:params:oauth:token-type:jwt:auth0" | "urn:devrev:params:oauth:token-type:jwt:dev" | "urn:devrev:params:oauth:token-type:rat" | "urn:devrev:params:oauth:token-type:revinfo" | "urn:devrev:params:oauth:token-type:session" | "urn:devrev:params:oauth:token-type:sysu" | "urn:devrev:params:oauth:token-type:userinfo" | "urn:devrev:params:oauth:token-type:userinfo:profile" | "urn:ietf:params:oauth:token-type:jwt"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"token_hint"} type={"string"}>
+
+A hint that identifies the token.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `201` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `409` | 409 Conflict. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/auth-tokens.create" \
+  -d '{
+  "act_as": "string",
+  "aud": [
+    "string"
+  ],
+  "client_id": "string",
+  "expires_in": 4294967295,
+  "grant_type": "urn:devrev:params:oauth:grant-type:token-issue",
+  "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+  "rev_info": {
+    "org_ref": "string",
+    "org_traits": {
+      "custom_fields": {},
+      "description": "string",
+      "display_name": "string",
+      "domain": "string",
+      "phone_numbers": [
+        "string"
+      ],
+      "tier": "string"
+    },
+    "user_id": "string",
+    "user_ref": "string",
+    "user_traits": {
+      "custom_fields": {},
+      "description": "string",
+      "display_name": "string",
+      "email": "string",
+      "full_name": "string",
+      "phone_numbers": [
+        "string"
+      ]
+    }
+  },
+  "scope": "string",
+  "subject_token": "string",
+  "subject_token_type": "urn:devrev:params:oauth:token-type:jwt:auth0",
+  "token_hint": "string"
+}'
+```
+
+<Tabs items={["201","400","401","403","409","429","500","503"]}>
+
+<Tab value={"201"}>
+
+Response for the request to create a new token corresponding to the
+requested token type.
+
+
+```json title="Example Response"
+{
+  "access_token": "string",
+  "client_id": "string",
+  "expires_in": 0,
+  "refresh_token": "string",
+  "scope": "string",
+  "token_type": "bearer"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Response for the request to create a new token corresponding to the
+ * requested token type.
+ *
+ */
+export interface AuthTokensCreateResponse {
+  /**
+   * The issued JSON Web Token (JWT) corresponding to the requested
+   * token type.
+   *
+   */
+  access_token: string;
+  /**
+   * An identifier that represents the application which is requesting
+   * the token. Only present in a response corresponding to an
+   * application access token (AAT).
+   *
+   */
+  client_id?: string;
+  /**
+   * The validity lifetime of the token specified in seconds since Unix
+   * epoch.
+   *
+   */
+  expires_in: number;
+  /**
+   * A token to refresh the issued token.
+   */
+  refresh_token?: string;
+  /**
+   * The scopes associated with the issued token. A space-delimited list
+   * of values in which the order of values does not matter.
+   *
+   */
+  scope?: string;
+  /**
+   * The type of the issued token. Bearer is the only supported token type.
+   *
+   */
+  token_type: "bearer";
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"409"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "conflict"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorConflict = ErrorBase & ErrorConflictConflict;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorConflictConflict {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/auth-tokens.delete"}>
+
+## auth-tokens-delete
+
+Revokes the token that matches the given token ID issued under the
+given Dev organization.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"token_id"} type={"string"}>
+
+The unique identifier for the token under a given Dev organization.
+If no token ID is provided, then the token ID will be set from the
+JTI claim of the token in the authorization header.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/auth-tokens.delete" \
+  -d '{
+  "token_id": "string"
+}'
+```
+
+<Tabs items={["400","401","403","404","429","500","503"]}>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/auth-tokens.get"}>
+
+## auth-tokens-get
+
+Gets the token metadata corresponding to the given token ID under the
+given Dev organization.
+
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"token_id"} type={"string"}>
+
+The unique identifier of the token under a given Dev organization.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/auth-tokens.get"
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to get the token metadata.
+
+```json title="Example Response"
+{
+  "token": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "client_id": "string",
+    "expires_at": "2023-01-01T12:00:00.000Z",
+    "issued_at": "2023-01-01T12:00:00.000Z",
+    "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+    "scopes": [
+      "string"
+    ],
+    "status": "active",
+    "subject": "string",
+    "token_hint": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type AuthToken = AtomBase & {
+  /**
+   * An identifier that represents the application that requested the
+   * token. Only applicable for application access tokens.
+   *
+   */
+  client_id?: string;
+  /**
+   * The time at which the token expires.
+   */
+  expires_at?: string;
+  /**
+   * The time at which the token was issued.
+   */
+  issued_at?: string;
+  /**
+   * The type of the requested token.
+   */
+  requested_token_type?:
+    | "urn:devrev:params:oauth:token-type:aat"
+    | "urn:devrev:params:oauth:token-type:aat:act-as"
+    | "urn:devrev:params:oauth:token-type:aat:public"
+    | "urn:devrev:params:oauth:token-type:dev"
+    | "urn:devrev:params:oauth:token-type:dev:connect"
+    | "urn:devrev:params:oauth:token-type:gat"
+    | "urn:devrev:params:oauth:token-type:pat"
+    | "urn:devrev:params:oauth:token-type:pat:act-as"
+    | "urn:devrev:params:oauth:token-type:rat"
+    | "urn:devrev:params:oauth:token-type:rev"
+    | "urn:devrev:params:oauth:token-type:session"
+    | "urn:devrev:params:oauth:token-type:session:dev0"
+    | "urn:devrev:params:oauth:token-type:session:onetime"
+    | "urn:devrev:params:oauth:token-type:session:rev:act-as"
+    | "urn:devrev:params:oauth:token-type:super"
+    | "urn:devrev:params:oauth:token-type:sys"
+    | "urn:ietf:params:oauth:token-type:jwt";
+  /**
+   * The scopes associated with the issued token.
+   */
+  scopes?: string[];
+  /**
+   * The status of the token.
+   */
+  status?: "active" | "expired" | "revoked";
+  /**
+   * The subject of the token.
+   */
+  subject?: string;
+  /**
+   * A hint that identifies the token.
+   */
+  token_hint?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+
+/**
+ * The response to get the token metadata.
+ */
+export interface AuthTokensGetResponse {
+  token: AuthToken;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/auth-tokens.get"}>
+
+## auth-tokens-get-post
+
+Gets the token metadata corresponding to the given token ID under the
+given Dev organization.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"token_id"} type={"string"}>
+
+The unique identifier of the token under a given Dev organization.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/auth-tokens.get" \
+  -d '{
+  "token_id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to get the token metadata.
+
+```json title="Example Response"
+{
+  "token": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "client_id": "string",
+    "expires_at": "2023-01-01T12:00:00.000Z",
+    "issued_at": "2023-01-01T12:00:00.000Z",
+    "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+    "scopes": [
+      "string"
+    ],
+    "status": "active",
+    "subject": "string",
+    "token_hint": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type AuthToken = AtomBase & {
+  /**
+   * An identifier that represents the application that requested the
+   * token. Only applicable for application access tokens.
+   *
+   */
+  client_id?: string;
+  /**
+   * The time at which the token expires.
+   */
+  expires_at?: string;
+  /**
+   * The time at which the token was issued.
+   */
+  issued_at?: string;
+  /**
+   * The type of the requested token.
+   */
+  requested_token_type?:
+    | "urn:devrev:params:oauth:token-type:aat"
+    | "urn:devrev:params:oauth:token-type:aat:act-as"
+    | "urn:devrev:params:oauth:token-type:aat:public"
+    | "urn:devrev:params:oauth:token-type:dev"
+    | "urn:devrev:params:oauth:token-type:dev:connect"
+    | "urn:devrev:params:oauth:token-type:gat"
+    | "urn:devrev:params:oauth:token-type:pat"
+    | "urn:devrev:params:oauth:token-type:pat:act-as"
+    | "urn:devrev:params:oauth:token-type:rat"
+    | "urn:devrev:params:oauth:token-type:rev"
+    | "urn:devrev:params:oauth:token-type:session"
+    | "urn:devrev:params:oauth:token-type:session:dev0"
+    | "urn:devrev:params:oauth:token-type:session:onetime"
+    | "urn:devrev:params:oauth:token-type:session:rev:act-as"
+    | "urn:devrev:params:oauth:token-type:super"
+    | "urn:devrev:params:oauth:token-type:sys"
+    | "urn:ietf:params:oauth:token-type:jwt";
+  /**
+   * The scopes associated with the issued token.
+   */
+  scopes?: string[];
+  /**
+   * The status of the token.
+   */
+  status?: "active" | "expired" | "revoked";
+  /**
+   * The subject of the token.
+   */
+  subject?: string;
+  /**
+   * A hint that identifies the token.
+   */
+  token_hint?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+
+/**
+ * The response to get the token metadata.
+ */
+export interface AuthTokensGetResponse {
+  token: AuthToken;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/auth-tokens.list"}>
+
+## auth-tokens-list
+
+Gets the token metadata for all the tokens corresponding to the given
+token type issued for a given subject.
+
+
+### Query Parameters
+
+<Property required={false} deprecated={false} name={"client_id"} type={"string"}>
+
+An identifier that represents the application, which requested the
+token. Only relevant for application access tokens.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"requested_token_type"} type={"string"}>
+
+The type of the requested token. If no value is specified, the
+response will include tokens of all the types.
+
+
+<span>Value in:  `"urn:devrev:params:oauth:token-type:aat" | "urn:devrev:params:oauth:token-type:aat:act-as" | "urn:devrev:params:oauth:token-type:aat:public" | "urn:devrev:params:oauth:token-type:dev" | "urn:devrev:params:oauth:token-type:dev:connect" | "urn:devrev:params:oauth:token-type:gat" | "urn:devrev:params:oauth:token-type:pat" | "urn:devrev:params:oauth:token-type:pat:act-as" | "urn:devrev:params:oauth:token-type:rat" | "urn:devrev:params:oauth:token-type:rev" | "urn:devrev:params:oauth:token-type:session" | "urn:devrev:params:oauth:token-type:session:dev0" | "urn:devrev:params:oauth:token-type:session:onetime" | "urn:devrev:params:oauth:token-type:session:rev:act-as" | "urn:devrev:params:oauth:token-type:super" | "urn:devrev:params:oauth:token-type:sys" | "urn:ietf:params:oauth:token-type:jwt"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"subject"} type={"string"}>
+
+The subject associated with the token. In the absence of this
+parameter, the ID of the authenticated entity is treated as the
+subject.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/auth-tokens.list"
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to list the token metadata.
+
+```json title="Example Response"
+{
+  "tokens": [
+    {
+      "created_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "created_date": "2023-01-01T12:00:00.000Z",
+      "display_id": "string",
+      "id": "string",
+      "modified_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "client_id": "string",
+      "expires_at": "2023-01-01T12:00:00.000Z",
+      "issued_at": "2023-01-01T12:00:00.000Z",
+      "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+      "scopes": [
+        "string"
+      ],
+      "status": "active",
+      "subject": "string",
+      "token_hint": "string"
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type AuthToken = AtomBase & {
+  /**
+   * An identifier that represents the application that requested the
+   * token. Only applicable for application access tokens.
+   *
+   */
+  client_id?: string;
+  /**
+   * The time at which the token expires.
+   */
+  expires_at?: string;
+  /**
+   * The time at which the token was issued.
+   */
+  issued_at?: string;
+  /**
+   * The type of the requested token.
+   */
+  requested_token_type?:
+    | "urn:devrev:params:oauth:token-type:aat"
+    | "urn:devrev:params:oauth:token-type:aat:act-as"
+    | "urn:devrev:params:oauth:token-type:aat:public"
+    | "urn:devrev:params:oauth:token-type:dev"
+    | "urn:devrev:params:oauth:token-type:dev:connect"
+    | "urn:devrev:params:oauth:token-type:gat"
+    | "urn:devrev:params:oauth:token-type:pat"
+    | "urn:devrev:params:oauth:token-type:pat:act-as"
+    | "urn:devrev:params:oauth:token-type:rat"
+    | "urn:devrev:params:oauth:token-type:rev"
+    | "urn:devrev:params:oauth:token-type:session"
+    | "urn:devrev:params:oauth:token-type:session:dev0"
+    | "urn:devrev:params:oauth:token-type:session:onetime"
+    | "urn:devrev:params:oauth:token-type:session:rev:act-as"
+    | "urn:devrev:params:oauth:token-type:super"
+    | "urn:devrev:params:oauth:token-type:sys"
+    | "urn:ietf:params:oauth:token-type:jwt";
+  /**
+   * The scopes associated with the issued token.
+   */
+  scopes?: string[];
+  /**
+   * The status of the token.
+   */
+  status?: "active" | "expired" | "revoked";
+  /**
+   * The subject of the token.
+   */
+  subject?: string;
+  /**
+   * A hint that identifies the token.
+   */
+  token_hint?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+
+/**
+ * The response to list the token metadata.
+ */
+export interface AuthTokensListResponse {
+  /**
+   * The list of token metadata.
+   */
+  tokens: AuthToken[];
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/auth-tokens.list"}>
+
+## auth-tokens-list-post
+
+Gets the token metadata for all the tokens corresponding to the given
+token type issued for a given subject.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"client_id"} type={"string"}>
+
+An identifier that represents the application, which requested the
+token. Only relevant for application access tokens.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"requested_token_type"} type={"string"}>
+
+The type of the requested token.
+
+<span>Value in:  `"urn:devrev:params:oauth:token-type:aat" | "urn:devrev:params:oauth:token-type:aat:act-as" | "urn:devrev:params:oauth:token-type:aat:public" | "urn:devrev:params:oauth:token-type:dev" | "urn:devrev:params:oauth:token-type:dev:connect" | "urn:devrev:params:oauth:token-type:gat" | "urn:devrev:params:oauth:token-type:pat" | "urn:devrev:params:oauth:token-type:pat:act-as" | "urn:devrev:params:oauth:token-type:rat" | "urn:devrev:params:oauth:token-type:rev" | "urn:devrev:params:oauth:token-type:session" | "urn:devrev:params:oauth:token-type:session:dev0" | "urn:devrev:params:oauth:token-type:session:onetime" | "urn:devrev:params:oauth:token-type:session:rev:act-as" | "urn:devrev:params:oauth:token-type:super" | "urn:devrev:params:oauth:token-type:sys" | "urn:ietf:params:oauth:token-type:jwt"`</span>
+
+</Property>
+
+<Property required={false} deprecated={false} name={"subject"} type={"string"}>
+
+The subject associated with the token. In the absence of this
+parameter, the ID of the authenticated entity is treated as the
+subject.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/auth-tokens.list" \
+  -d '{
+  "client_id": "string",
+  "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+  "subject": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+The response to list the token metadata.
+
+```json title="Example Response"
+{
+  "tokens": [
+    {
+      "created_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "created_date": "2023-01-01T12:00:00.000Z",
+      "display_id": "string",
+      "id": "string",
+      "modified_by": {
+        "type": "dev_user",
+        "display_id": "string",
+        "id": "string",
+        "display_name": "string",
+        "display_picture": {
+          "display_id": "string",
+          "id": "string"
+        },
+        "email": "string",
+        "full_name": "string",
+        "state": "active"
+      },
+      "modified_date": "2023-01-01T12:00:00.000Z",
+      "client_id": "string",
+      "expires_at": "2023-01-01T12:00:00.000Z",
+      "issued_at": "2023-01-01T12:00:00.000Z",
+      "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+      "scopes": [
+        "string"
+      ],
+      "status": "active",
+      "subject": "string",
+      "token_hint": "string"
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type AuthToken = AtomBase & {
+  /**
+   * An identifier that represents the application that requested the
+   * token. Only applicable for application access tokens.
+   *
+   */
+  client_id?: string;
+  /**
+   * The time at which the token expires.
+   */
+  expires_at?: string;
+  /**
+   * The time at which the token was issued.
+   */
+  issued_at?: string;
+  /**
+   * The type of the requested token.
+   */
+  requested_token_type?:
+    | "urn:devrev:params:oauth:token-type:aat"
+    | "urn:devrev:params:oauth:token-type:aat:act-as"
+    | "urn:devrev:params:oauth:token-type:aat:public"
+    | "urn:devrev:params:oauth:token-type:dev"
+    | "urn:devrev:params:oauth:token-type:dev:connect"
+    | "urn:devrev:params:oauth:token-type:gat"
+    | "urn:devrev:params:oauth:token-type:pat"
+    | "urn:devrev:params:oauth:token-type:pat:act-as"
+    | "urn:devrev:params:oauth:token-type:rat"
+    | "urn:devrev:params:oauth:token-type:rev"
+    | "urn:devrev:params:oauth:token-type:session"
+    | "urn:devrev:params:oauth:token-type:session:dev0"
+    | "urn:devrev:params:oauth:token-type:session:onetime"
+    | "urn:devrev:params:oauth:token-type:session:rev:act-as"
+    | "urn:devrev:params:oauth:token-type:super"
+    | "urn:devrev:params:oauth:token-type:sys"
+    | "urn:ietf:params:oauth:token-type:jwt";
+  /**
+   * The scopes associated with the issued token.
+   */
+  scopes?: string[];
+  /**
+   * The status of the token.
+   */
+  status?: "active" | "expired" | "revoked";
+  /**
+   * The subject of the token.
+   */
+  subject?: string;
+  /**
+   * A hint that identifies the token.
+   */
+  token_hint?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+
+/**
+ * The response to list the token metadata.
+ */
+export interface AuthTokensListResponse {
+  /**
+   * The list of token metadata.
+   */
+  tokens: AuthToken[];
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/auth-tokens.self.delete"}>
+
+## auth-tokens-self-delete
+
+Revokes all the tokens that matches the given token type created by the
+authenticated user.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"requested_token_type"} type={"string"}>
+
+The type of the requested token.
+
+<span>Value in:  `"urn:devrev:params:oauth:token-type:aat" | "urn:devrev:params:oauth:token-type:aat:act-as" | "urn:devrev:params:oauth:token-type:aat:public" | "urn:devrev:params:oauth:token-type:dev" | "urn:devrev:params:oauth:token-type:dev:connect" | "urn:devrev:params:oauth:token-type:gat" | "urn:devrev:params:oauth:token-type:pat" | "urn:devrev:params:oauth:token-type:pat:act-as" | "urn:devrev:params:oauth:token-type:rat" | "urn:devrev:params:oauth:token-type:rev" | "urn:devrev:params:oauth:token-type:session" | "urn:devrev:params:oauth:token-type:session:dev0" | "urn:devrev:params:oauth:token-type:session:onetime" | "urn:devrev:params:oauth:token-type:session:rev:act-as" | "urn:devrev:params:oauth:token-type:super" | "urn:devrev:params:oauth:token-type:sys" | "urn:ietf:params:oauth:token-type:jwt"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/auth-tokens.self.delete" \
+  -d '{
+  "requested_token_type": "urn:devrev:params:oauth:token-type:aat"
+}'
+```
+
+<Tabs items={["400","401","403","404","429","500","503"]}>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/auth-tokens.update"}>
+
+## auth-tokens-update
+
+Updates token metadata of a token issued under a given Dev
+organization.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"token_hint"} type={"string"}>
+
+A hint that identifies the token.
+
+</Property>
+
+<Property required={true} deprecated={false} name={"token_id"} type={"string"}>
+
+The unique identifier of the token under a given Dev organization.
+
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/auth-tokens.update" \
+  -d '{
+  "token_hint": "string",
+  "token_id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Response for the request to update the token metadata.
+
+```json title="Example Response"
+{
+  "token": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "client_id": "string",
+    "expires_at": "2023-01-01T12:00:00.000Z",
+    "issued_at": "2023-01-01T12:00:00.000Z",
+    "requested_token_type": "urn:devrev:params:oauth:token-type:aat",
+    "scopes": [
+      "string"
+    ],
+    "status": "active",
+    "subject": "string",
+    "token_hint": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type AuthToken = AtomBase & {
+  /**
+   * An identifier that represents the application that requested the
+   * token. Only applicable for application access tokens.
+   *
+   */
+  client_id?: string;
+  /**
+   * The time at which the token expires.
+   */
+  expires_at?: string;
+  /**
+   * The time at which the token was issued.
+   */
+  issued_at?: string;
+  /**
+   * The type of the requested token.
+   */
+  requested_token_type?:
+    | "urn:devrev:params:oauth:token-type:aat"
+    | "urn:devrev:params:oauth:token-type:aat:act-as"
+    | "urn:devrev:params:oauth:token-type:aat:public"
+    | "urn:devrev:params:oauth:token-type:dev"
+    | "urn:devrev:params:oauth:token-type:dev:connect"
+    | "urn:devrev:params:oauth:token-type:gat"
+    | "urn:devrev:params:oauth:token-type:pat"
+    | "urn:devrev:params:oauth:token-type:pat:act-as"
+    | "urn:devrev:params:oauth:token-type:rat"
+    | "urn:devrev:params:oauth:token-type:rev"
+    | "urn:devrev:params:oauth:token-type:session"
+    | "urn:devrev:params:oauth:token-type:session:dev0"
+    | "urn:devrev:params:oauth:token-type:session:onetime"
+    | "urn:devrev:params:oauth:token-type:session:rev:act-as"
+    | "urn:devrev:params:oauth:token-type:super"
+    | "urn:devrev:params:oauth:token-type:sys"
+    | "urn:ietf:params:oauth:token-type:jwt";
+  /**
+   * The scopes associated with the issued token.
+   */
+  scopes?: string[];
+  /**
+   * The status of the token.
+   */
+  status?: "active" | "expired" | "revoked";
+  /**
+   * The subject of the token.
+   */
+  subject?: string;
+  /**
+   * A hint that identifies the token.
+   */
+  token_hint?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+
+/**
+ * Response for the request to update the token metadata.
+ */
+export interface AuthTokensUpdateResponse {
+  token: AuthToken;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+</Root>

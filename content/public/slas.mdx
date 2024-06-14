@@ -1,0 +1,1406 @@
+---
+title: slas
+description: Management APIs for Service Level Agreements.
+toc: false
+---
+
+import { Root, API, APIInfo, APIExample, Property } from 'fumadocs-ui/components/api'
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs'
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Root>
+
+<API>
+
+<APIInfo method={"GET"} route={"/sla-trackers.get"}>
+
+## sla-trackers-get
+
+Gets an SLA tracker.
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The ID of the SLA tracker to get.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/sla-trackers.get"
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "sla_tracker": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "applies_to_id": "string",
+    "metric_target_summaries": [
+      {
+        "is_out_of_schedule": true,
+        "metric_definition": {
+          "display_id": "string",
+          "id": "string",
+          "name": "string"
+        },
+        "org_schedule": {
+          "display_id": "string",
+          "id": "string",
+          "name": "string",
+          "status": "archived",
+          "timezone": "string",
+          "valid_until": "2023-01-01T12:00:00.000Z"
+        },
+        "remaining_time": 0,
+        "target_time": "2023-01-01T12:00:00.000Z",
+        "warning_target_time": "2023-01-01T12:00:00.000Z"
+      }
+    ],
+    "sla": {
+      "display_id": "string",
+      "id": "string",
+      "name": "string",
+      "status": "archived"
+    },
+    "sla_policy_id": "string",
+    "stage": "string",
+    "status": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type SlaTracker = AtomBase & {
+  /**
+   * Details of the object on which the SLA is being tracked.
+   */
+  applies_to_id?: string;
+  /**
+   * Summary of the metrics target being tracked in the SLA tracker.
+   *
+   */
+  metric_target_summaries: ArchetypeMetricTarget[];
+  sla?: SlaSummary;
+  /**
+   * Details of the applicable SLA policy. Can be omitted if no sla
+   * applies, or if no policy of the sla applies at the moment.
+   *
+   */
+  sla_policy_id?: string;
+  /**
+   * SLA stage of the object being tracked.
+   */
+  stage?: string;
+  /**
+   * It is an indicator of whether the SLA has ever been breached
+   * (missed). If not, it shows whether the SLA is completed, in
+   * progress, or nil - if no policy is applied.
+   *
+   */
+  status?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+export type MetricDefinitionSummary = AtomBaseSummary & {
+  /**
+   * Human readable name of the metric.
+   */
+  name?: string;
+};
+export type OrgScheduleSummary = AtomBaseSummary & {
+  /**
+   * Human-readable name.
+   */
+  name?: string;
+  /**
+   * Status determines how an item can be used. In 'draft' status an item
+   * can be edited but can't be used. When 'published' the item can longer
+   * be edited but can be used. 'Archived' is read-only.
+   *
+   */
+  status: "archived" | "draft" | "published";
+  /**
+   * Timezone in which this is defined. Only organization schedules in
+   * the same timezone can be directly combined.
+   *
+   */
+  timezone?: string;
+  /**
+   * Derived field indicating when a valid organization schedule will
+   * become invalid. If omitted, the schedule is already invalid. A
+   * schedule is valid if it has a weekly schedule for all named periods
+   * for all its schedule fragments, and if it has a schedule fragment
+   * for the time period in question.
+   *
+   */
+  valid_until?: string;
+};
+export type SlaSummary = AtomBaseSummary & {
+  /**
+   * Human-readable name.
+   */
+  name: string;
+  /**
+   * Status determines how an item can be used. In 'draft' status an item
+   * can be edited but can't be used. When 'published' the item can longer
+   * be edited but can be used. 'Archived' is read-only.
+   *
+   */
+  status: "archived" | "draft" | "published";
+};
+
+export interface SlaTrackersGetResponse {
+  sla_tracker: SlaTracker;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Metric with corresponding target values.
+ */
+export interface ArchetypeMetricTarget {
+  /**
+   * If true, the schedule attached to this metric is out of schedule at
+   * the time of the query.
+   *
+   */
+  is_out_of_schedule?: boolean;
+  metric_definition: MetricDefinitionSummary;
+  org_schedule?: OrgScheduleSummary;
+  /**
+   * Time in minutes that remains on a paused metric.
+   */
+  remaining_time?: number;
+  /**
+   * Time at which the metric would breach SLA if no action taken.
+   *
+   */
+  target_time?: string;
+  /**
+   * Time at which the metric would reach the SLA warning limit if no
+   * action taken.
+   *
+   */
+  warning_target_time?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/sla-trackers.get"}>
+
+## sla-trackers-get-post
+
+Gets an SLA tracker.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+The ID of the SLA tracker to get.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/sla-trackers.get" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+
+
+```json title="Example Response"
+{
+  "sla_tracker": {
+    "created_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "created_date": "2023-01-01T12:00:00.000Z",
+    "display_id": "string",
+    "id": "string",
+    "modified_by": {
+      "type": "dev_user",
+      "display_id": "string",
+      "id": "string",
+      "display_name": "string",
+      "display_picture": {
+        "display_id": "string",
+        "id": "string"
+      },
+      "email": "string",
+      "full_name": "string",
+      "state": "active"
+    },
+    "modified_date": "2023-01-01T12:00:00.000Z",
+    "applies_to_id": "string",
+    "metric_target_summaries": [
+      {
+        "is_out_of_schedule": true,
+        "metric_definition": {
+          "display_id": "string",
+          "id": "string",
+          "name": "string"
+        },
+        "org_schedule": {
+          "display_id": "string",
+          "id": "string",
+          "name": "string",
+          "status": "archived",
+          "timezone": "string",
+          "valid_until": "2023-01-01T12:00:00.000Z"
+        },
+        "remaining_time": 0,
+        "target_time": "2023-01-01T12:00:00.000Z",
+        "warning_target_time": "2023-01-01T12:00:00.000Z"
+      }
+    ],
+    "sla": {
+      "display_id": "string",
+      "id": "string",
+      "name": "string",
+      "status": "archived"
+    },
+    "sla_policy_id": "string",
+    "stage": "string",
+    "status": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type SlaTracker = AtomBase & {
+  /**
+   * Details of the object on which the SLA is being tracked.
+   */
+  applies_to_id?: string;
+  /**
+   * Summary of the metrics target being tracked in the SLA tracker.
+   *
+   */
+  metric_target_summaries: ArchetypeMetricTarget[];
+  sla?: SlaSummary;
+  /**
+   * Details of the applicable SLA policy. Can be omitted if no sla
+   * applies, or if no policy of the sla applies at the moment.
+   *
+   */
+  sla_policy_id?: string;
+  /**
+   * SLA stage of the object being tracked.
+   */
+  stage?: string;
+  /**
+   * It is an indicator of whether the SLA has ever been breached
+   * (missed). If not, it shows whether the SLA is completed, in
+   * progress, or nil - if no policy is applied.
+   *
+   */
+  status?: string;
+};
+export type UserSummary = DevUserSummary | RevUserSummary | SysUserSummary;
+export type DevUserSummary = UserBaseSummary;
+export type UserBaseSummary = AtomBaseSummary & {
+  /**
+   * The user's display name. The name is non-unique and mutable.
+   *
+   */
+  display_name?: string;
+  display_picture?: ArtifactSummary;
+  /**
+   * Email address of the user.
+   */
+  email?: string;
+  /**
+   * Full name of the user.
+   */
+  full_name?: string;
+  /**
+   * State of the user.
+   */
+  state?: "active" | "deactivated" | "deleted" | "locked" | "shadow" | "unassigned";
+};
+export type ArtifactSummary = AtomBaseSummary;
+export type RevUserSummary = UserBaseSummary & {
+  /**
+   * External ref is a mutable unique identifier for a user within the
+   * Rev organization from your primary customer record. If none is
+   * available, a good alternative is the email address/phone number
+   * which could uniquely identify the user. If none is specified, a
+   * system-generated identifier will be assigned to the user.
+   *
+   */
+  external_ref?: string;
+  rev_org?: OrgSummary;
+};
+export type OrgSummary = RevOrgSummary;
+export type RevOrgSummary = OrgBaseSummary;
+export type OrgBaseSummary = AtomBaseSummary & {
+  /**
+   * Name of the Organization.
+   */
+  display_name?: string;
+};
+export type SysUserSummary = UserBaseSummary;
+export type MetricDefinitionSummary = AtomBaseSummary & {
+  /**
+   * Human readable name of the metric.
+   */
+  name?: string;
+};
+export type OrgScheduleSummary = AtomBaseSummary & {
+  /**
+   * Human-readable name.
+   */
+  name?: string;
+  /**
+   * Status determines how an item can be used. In 'draft' status an item
+   * can be edited but can't be used. When 'published' the item can longer
+   * be edited but can be used. 'Archived' is read-only.
+   *
+   */
+  status: "archived" | "draft" | "published";
+  /**
+   * Timezone in which this is defined. Only organization schedules in
+   * the same timezone can be directly combined.
+   *
+   */
+  timezone?: string;
+  /**
+   * Derived field indicating when a valid organization schedule will
+   * become invalid. If omitted, the schedule is already invalid. A
+   * schedule is valid if it has a weekly schedule for all named periods
+   * for all its schedule fragments, and if it has a schedule fragment
+   * for the time period in question.
+   *
+   */
+  valid_until?: string;
+};
+export type SlaSummary = AtomBaseSummary & {
+  /**
+   * Human-readable name.
+   */
+  name: string;
+  /**
+   * Status determines how an item can be used. In 'draft' status an item
+   * can be edited but can't be used. When 'published' the item can longer
+   * be edited but can be used. 'Archived' is read-only.
+   *
+   */
+  status: "archived" | "draft" | "published";
+};
+
+export interface SlaTrackersGetResponse {
+  sla_tracker: SlaTracker;
+}
+export interface AtomBase {
+  created_by?: UserSummary;
+  /**
+   * Timestamp when the object was created.
+   */
+  created_date?: string;
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+  modified_by?: UserSummary;
+  /**
+   * Timestamp when the object was last modified.
+   */
+  modified_date?: string;
+}
+export interface AtomBaseSummary {
+  /**
+   * Human-readable object ID unique to the Dev organization.
+   */
+  display_id?: string;
+  /**
+   * Globally unique object ID.
+   */
+  id: string;
+}
+/**
+ * Metric with corresponding target values.
+ */
+export interface ArchetypeMetricTarget {
+  /**
+   * If true, the schedule attached to this metric is out of schedule at
+   * the time of the query.
+   *
+   */
+  is_out_of_schedule?: boolean;
+  metric_definition: MetricDefinitionSummary;
+  org_schedule?: OrgScheduleSummary;
+  /**
+   * Time in minutes that remains on a paused metric.
+   */
+  remaining_time?: number;
+  /**
+   * Time at which the metric would breach SLA if no action taken.
+   *
+   */
+  target_time?: string;
+  /**
+   * Time at which the metric would reach the SLA warning limit if no
+   * action taken.
+   *
+   */
+  warning_target_time?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+</Root>

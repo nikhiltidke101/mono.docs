@@ -1,0 +1,4187 @@
+---
+title: dev-orgs
+description: Dev organization interactions.
+toc: false
+---
+
+import { Root, API, APIInfo, APIExample, Property } from 'fumadocs-ui/components/api'
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs'
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+<Root>
+
+<API>
+
+<APIInfo method={"POST"} route={"/dev-orgs.auth-connections.create"}>
+
+## dev-org-auth-connections-create
+
+Creates a new enterprise authentication connection for a Dev
+organization. This authentication connection will not be enabled by
+default for the organization and the user will need to explicitly
+enable this. Keep in mind that at a time, only one authentication
+connection can be enabled for a Dev organization. At present, only 5
+enterprise connections can be created by an organization.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"display_name"} type={"string"}>
+
+Display name of the authentication connection. This name will be
+visible to all the users when they sign in to this Dev
+organization. For example, if the display_name is 'abclogin', then
+it would appear on the login button as 'Log in to abclogin'.
+
+
+</Property>
+
+<Property required={true} deprecated={false} name={"type"} type={"string"}>
+
+Defines the type for the authentication connection. Different types of
+authentication connections have different configuration parameters.
+
+
+<span>Value in:  `"google_apps" | "oidc" | "samlp" | "waad"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `201` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/dev-orgs.auth-connections.create" \
+  -d '{
+  "display_name": "string",
+  "type": "google_apps",
+  "client_id": "string",
+  "client_secret": "string",
+  "domain": "string"
+}'
+```
+
+<Tabs items={["201","400","401","403","429","500","503"]}>
+
+<Tab value={"201"}>
+
+Response for the request to create a new enterprise authentication
+connection.
+
+
+```json title="Example Response"
+{
+  "auth_connection": {
+    "display_name": "string",
+    "enabled": true,
+    "id": "string",
+    "type": "google_apps",
+    "client_id": "string",
+    "client_secret": "string",
+    "domain": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Connection object that specifies the configuration for an
+ * authentication connection that is set up for a Dev organization.
+ *
+ */
+export type AuthConnection =
+  | AuthConnectionOptionsAzureAd
+  | AuthConnectionOptionsGoogleApps
+  | AuthConnectionOptionsOidc
+  | AuthConnectionOptionsSaml
+  | AuthConnectionOptionsSocial;
+
+/**
+ * Response for the request to create a new enterprise authentication
+ * connection.
+ *
+ */
+export interface DevOrgAuthConnectionsCreateResponse {
+  auth_connection: AuthConnection;
+}
+/**
+ * Object encapsulating the configuration parameters for an Azure AD
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsAzureAd {
+  /**
+   * Client ID for the Azure authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Azure authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Domain URL of the Azure authentication connection.
+   */
+  domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a Google Apps
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsGoogleApps {
+  /**
+   * Client ID for the Google Apps authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Google Apps authentication connection.
+   *
+   */
+  client_secret?: string;
+  /**
+   * Tenant domain URL of the Google Apps authentication connection.
+   *
+   */
+  tenant_domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for an OIDC
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsOidc {
+  /**
+   * Client ID for the OIDC authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the OIDC authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Issuer URL of the OIDC authentication connection.
+   */
+  issuer?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a SAML
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsSaml {
+  /**
+   * Sign In endpoint for the SAML authentication connection.
+   */
+  sign_in_endpoint?: string;
+  /**
+   * Signing certificate for the SAML authentication connection.
+   *
+   */
+  signing_cert?: string;
+}
+export interface AuthConnectionOptionsSocial {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/dev-orgs.auth-connections.delete"}>
+
+## dev-org-auth-connections-delete
+
+Deletes an authentication connection. Only enterprise connections which
+are explicitly set up for a Dev organization can be deleted. Default
+connections can not be deleted using this method.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+ID of the authentication connection to be deleted.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/dev-orgs.auth-connections.delete" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["400","401","403","404","429","500","503"]}>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/dev-orgs.auth-connections.get"}>
+
+## dev-org-auth-connections-get
+
+Retrieves the details for an authentication connection.
+
+### Query Parameters
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+ID of the authentication connection.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/dev-orgs.auth-connections.get"
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Response object encapsulating the configuration details of an
+authentication connection.
+
+
+```json title="Example Response"
+{
+  "auth_connection": {
+    "display_name": "string",
+    "enabled": true,
+    "id": "string",
+    "type": "google_apps",
+    "client_id": "string",
+    "client_secret": "string",
+    "domain": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Connection object that specifies the configuration for an
+ * authentication connection that is set up for a Dev organization.
+ *
+ */
+export type AuthConnection =
+  | AuthConnectionOptionsAzureAd
+  | AuthConnectionOptionsGoogleApps
+  | AuthConnectionOptionsOidc
+  | AuthConnectionOptionsSaml
+  | AuthConnectionOptionsSocial;
+
+/**
+ * Response object encapsulating the configuration details of an
+ * authentication connection.
+ *
+ */
+export interface DevOrgAuthConnectionsGetResponse {
+  auth_connection: AuthConnection;
+}
+/**
+ * Object encapsulating the configuration parameters for an Azure AD
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsAzureAd {
+  /**
+   * Client ID for the Azure authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Azure authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Domain URL of the Azure authentication connection.
+   */
+  domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a Google Apps
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsGoogleApps {
+  /**
+   * Client ID for the Google Apps authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Google Apps authentication connection.
+   *
+   */
+  client_secret?: string;
+  /**
+   * Tenant domain URL of the Google Apps authentication connection.
+   *
+   */
+  tenant_domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for an OIDC
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsOidc {
+  /**
+   * Client ID for the OIDC authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the OIDC authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Issuer URL of the OIDC authentication connection.
+   */
+  issuer?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a SAML
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsSaml {
+  /**
+   * Sign In endpoint for the SAML authentication connection.
+   */
+  sign_in_endpoint?: string;
+  /**
+   * Signing certificate for the SAML authentication connection.
+   *
+   */
+  signing_cert?: string;
+}
+export interface AuthConnectionOptionsSocial {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/dev-orgs.auth-connections.get"}>
+
+## dev-org-auth-connections-get-post
+
+Retrieves the details for an authentication connection.
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+ID of the authentication connection.
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/dev-orgs.auth-connections.get" \
+  -d '{
+  "id": "string"
+}'
+```
+
+<Tabs items={["200","400","401","403","404","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Response object encapsulating the configuration details of an
+authentication connection.
+
+
+```json title="Example Response"
+{
+  "auth_connection": {
+    "display_name": "string",
+    "enabled": true,
+    "id": "string",
+    "type": "google_apps",
+    "client_id": "string",
+    "client_secret": "string",
+    "domain": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Connection object that specifies the configuration for an
+ * authentication connection that is set up for a Dev organization.
+ *
+ */
+export type AuthConnection =
+  | AuthConnectionOptionsAzureAd
+  | AuthConnectionOptionsGoogleApps
+  | AuthConnectionOptionsOidc
+  | AuthConnectionOptionsSaml
+  | AuthConnectionOptionsSocial;
+
+/**
+ * Response object encapsulating the configuration details of an
+ * authentication connection.
+ *
+ */
+export interface DevOrgAuthConnectionsGetResponse {
+  auth_connection: AuthConnection;
+}
+/**
+ * Object encapsulating the configuration parameters for an Azure AD
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsAzureAd {
+  /**
+   * Client ID for the Azure authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Azure authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Domain URL of the Azure authentication connection.
+   */
+  domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a Google Apps
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsGoogleApps {
+  /**
+   * Client ID for the Google Apps authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Google Apps authentication connection.
+   *
+   */
+  client_secret?: string;
+  /**
+   * Tenant domain URL of the Google Apps authentication connection.
+   *
+   */
+  tenant_domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for an OIDC
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsOidc {
+  /**
+   * Client ID for the OIDC authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the OIDC authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Issuer URL of the OIDC authentication connection.
+   */
+  issuer?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a SAML
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsSaml {
+  /**
+   * Sign In endpoint for the SAML authentication connection.
+   */
+  sign_in_endpoint?: string;
+  /**
+   * Signing certificate for the SAML authentication connection.
+   *
+   */
+  signing_cert?: string;
+}
+export interface AuthConnectionOptionsSocial {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"GET"} route={"/dev-orgs.auth-connections.list"}>
+
+## dev-org-auth-connections-list
+
+Lists all the authentication connections available for a Dev
+organization. This list will include both social and enterprise
+connections which are either available by default or are explicitly
+created by the user.
+
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X GET "https://api.devrev.ai/dev-orgs.auth-connections.list"
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Response object for the request to list all the social and enterprise
+authentication connections configured for a Dev organization.
+
+
+```json title="Example Response"
+{
+  "auth_connections": [
+    {
+      "display_name": "string",
+      "enabled": true,
+      "id": "string",
+      "type": "google_apps",
+      "client_id": "string",
+      "client_secret": "string",
+      "domain": "string"
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Connection object that specifies the configuration for an
+ * authentication connection that is set up for a Dev organization.
+ *
+ */
+export type AuthConnection =
+  | AuthConnectionOptionsAzureAd
+  | AuthConnectionOptionsGoogleApps
+  | AuthConnectionOptionsOidc
+  | AuthConnectionOptionsSaml
+  | AuthConnectionOptionsSocial;
+
+/**
+ * Response object for the request to list all the social and enterprise
+ * authentication connections configured for a Dev organization.
+ *
+ */
+export interface DevOrgAuthConnectionsListResponse {
+  /**
+   * List of all the authentication connections currently configured for
+   * a Dev organization.
+   *
+   */
+  auth_connections: AuthConnection[];
+}
+/**
+ * Object encapsulating the configuration parameters for an Azure AD
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsAzureAd {
+  /**
+   * Client ID for the Azure authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Azure authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Domain URL of the Azure authentication connection.
+   */
+  domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a Google Apps
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsGoogleApps {
+  /**
+   * Client ID for the Google Apps authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Google Apps authentication connection.
+   *
+   */
+  client_secret?: string;
+  /**
+   * Tenant domain URL of the Google Apps authentication connection.
+   *
+   */
+  tenant_domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for an OIDC
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsOidc {
+  /**
+   * Client ID for the OIDC authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the OIDC authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Issuer URL of the OIDC authentication connection.
+   */
+  issuer?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a SAML
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsSaml {
+  /**
+   * Sign In endpoint for the SAML authentication connection.
+   */
+  sign_in_endpoint?: string;
+  /**
+   * Signing certificate for the SAML authentication connection.
+   *
+   */
+  signing_cert?: string;
+}
+export interface AuthConnectionOptionsSocial {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/dev-orgs.auth-connections.list"}>
+
+## dev-org-auth-connections-list-post
+
+Lists all the authentication connections available for a Dev
+organization. This list will include both social and enterprise
+connections which are either available by default or are explicitly
+created by the user.
+
+
+### Request Body (Optional)
+
+
+
+
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/dev-orgs.auth-connections.list" \
+  -d '{}'
+```
+
+<Tabs items={["200","400","401","403","429","500","503"]}>
+
+<Tab value={"200"}>
+
+Response object for the request to list all the social and enterprise
+authentication connections configured for a Dev organization.
+
+
+```json title="Example Response"
+{
+  "auth_connections": [
+    {
+      "display_name": "string",
+      "enabled": true,
+      "id": "string",
+      "type": "google_apps",
+      "client_id": "string",
+      "client_secret": "string",
+      "domain": "string"
+    }
+  ]
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Connection object that specifies the configuration for an
+ * authentication connection that is set up for a Dev organization.
+ *
+ */
+export type AuthConnection =
+  | AuthConnectionOptionsAzureAd
+  | AuthConnectionOptionsGoogleApps
+  | AuthConnectionOptionsOidc
+  | AuthConnectionOptionsSaml
+  | AuthConnectionOptionsSocial;
+
+/**
+ * Response object for the request to list all the social and enterprise
+ * authentication connections configured for a Dev organization.
+ *
+ */
+export interface DevOrgAuthConnectionsListResponse {
+  /**
+   * List of all the authentication connections currently configured for
+   * a Dev organization.
+   *
+   */
+  auth_connections: AuthConnection[];
+}
+/**
+ * Object encapsulating the configuration parameters for an Azure AD
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsAzureAd {
+  /**
+   * Client ID for the Azure authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Azure authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Domain URL of the Azure authentication connection.
+   */
+  domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a Google Apps
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsGoogleApps {
+  /**
+   * Client ID for the Google Apps authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Google Apps authentication connection.
+   *
+   */
+  client_secret?: string;
+  /**
+   * Tenant domain URL of the Google Apps authentication connection.
+   *
+   */
+  tenant_domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for an OIDC
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsOidc {
+  /**
+   * Client ID for the OIDC authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the OIDC authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Issuer URL of the OIDC authentication connection.
+   */
+  issuer?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a SAML
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsSaml {
+  /**
+   * Sign In endpoint for the SAML authentication connection.
+   */
+  sign_in_endpoint?: string;
+  /**
+   * Signing certificate for the SAML authentication connection.
+   *
+   */
+  signing_cert?: string;
+}
+export interface AuthConnectionOptionsSocial {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/dev-orgs.auth-connections.toggle"}>
+
+## dev-org-auth-connections-toggle
+
+Enable or disable an authentication connection for a Dev organization.
+Currently, only 1 authentication connection can be enabled at a time.
+When a new authentication connection is enabled, the connection which
+is currently enabled for the Dev organization is automatically
+disabled.
+
+
+### Request Body (Optional)
+
+
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+ID of the authentication connection to be toggled.
+
+</Property>
+
+<Property required={false} deprecated={false} name={"toggle"} type={"string"}>
+
+
+
+<span>Value in:  `"disable" | "enable"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `200` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/dev-orgs.auth-connections.toggle" \
+  -d '{
+  "id": "string",
+  "toggle": "disable"
+}'
+```
+
+<Tabs items={["400","401","403","404","429","500","503"]}>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+<API>
+
+<APIInfo method={"POST"} route={"/dev-orgs.auth-connections.update"}>
+
+## dev-org-auth-connections-update
+
+Updates an authentication connection.
+
+### Request Body (Optional)
+
+
+
+<Property required={false} deprecated={false} name={"display_name"} type={"string"}>
+
+New display name of the authentication connection. This name will
+be visible to all the users when they sign in to this Dev
+organization. For example, if the display_name is 'abclogin', then
+it would appear on the login button as 'Log in to abclogin'.
+
+
+</Property>
+
+<Property required={true} deprecated={false} name={"id"} type={"string"}>
+
+ID of the authentication connection which is to be updated.
+
+
+</Property>
+
+<Property required={false} deprecated={false} name={"type"} type={"string"}>
+
+Specifies the type for the authentication connection. Different types
+of authentication connections have different configuration parameters
+that can be updated.
+
+
+<span>Value in:  `"google_apps" | "none" | "oidc" | "samlp" | "waad"`</span>
+
+</Property>
+
+| Status code | Description |
+| ----------- | ----------- |
+| `201` | Success. |
+| `400` | 400 Bad Request. |
+| `401` | 401 Unauthorized. |
+| `403` | 403 Forbidden. |
+| `404` | 404 Not Found. |
+| `429` | 429 Too Many Requests. |
+| `500` | 500 Internal Server Error. |
+| `503` | 503 Service Unavailable. |
+
+</APIInfo>
+
+<APIExample>
+
+```bash title="curl"
+curl -X POST "https://api.devrev.ai/dev-orgs.auth-connections.update" \
+  -d '{
+  "display_name": "string",
+  "id": "string",
+  "type": "google_apps",
+  "client_id": "string",
+  "client_secret": "string",
+  "domain": "string"
+}'
+```
+
+<Tabs items={["201","400","401","403","404","429","500","503"]}>
+
+<Tab value={"201"}>
+
+Response for the request to update an enterprise authentication
+connection.
+
+
+```json title="Example Response"
+{
+  "auth_connection": {
+    "display_name": "string",
+    "enabled": true,
+    "id": "string",
+    "type": "google_apps",
+    "client_id": "string",
+    "client_secret": "string",
+    "domain": "string"
+  }
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+/**
+ * Connection object that specifies the configuration for an
+ * authentication connection that is set up for a Dev organization.
+ *
+ */
+export type AuthConnection =
+  | AuthConnectionOptionsAzureAd
+  | AuthConnectionOptionsGoogleApps
+  | AuthConnectionOptionsOidc
+  | AuthConnectionOptionsSaml
+  | AuthConnectionOptionsSocial;
+
+/**
+ * Response for the request to update an enterprise authentication
+ * connection.
+ *
+ */
+export interface DevOrgAuthConnectionsUpdateResponse {
+  auth_connection: AuthConnection;
+}
+/**
+ * Object encapsulating the configuration parameters for an Azure AD
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsAzureAd {
+  /**
+   * Client ID for the Azure authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Azure authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Domain URL of the Azure authentication connection.
+   */
+  domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a Google Apps
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsGoogleApps {
+  /**
+   * Client ID for the Google Apps authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the Google Apps authentication connection.
+   *
+   */
+  client_secret?: string;
+  /**
+   * Tenant domain URL of the Google Apps authentication connection.
+   *
+   */
+  tenant_domain?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for an OIDC
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsOidc {
+  /**
+   * Client ID for the OIDC authentication connection.
+   */
+  client_id?: string;
+  /**
+   * Client secret for the OIDC authentication connection.
+   */
+  client_secret?: string;
+  /**
+   * Issuer URL of the OIDC authentication connection.
+   */
+  issuer?: string;
+}
+/**
+ * Object encapsulating the configuration parameters for a SAML
+ * authentication connection.
+ *
+ */
+export interface AuthConnectionOptionsSaml {
+  /**
+   * Sign In endpoint for the SAML authentication connection.
+   */
+  sign_in_endpoint?: string;
+  /**
+   * Signing certificate for the SAML authentication connection.
+   *
+   */
+  signing_cert?: string;
+}
+export interface AuthConnectionOptionsSocial {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"400"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "bad_request"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorBadRequest = ErrorBase &
+  (
+    | ErrorBadRequestBadRequest
+    | ErrorBadRequestInvalidApiVersion
+    | ErrorBadRequestInvalidEnumValue
+    | ErrorBadRequestInvalidField
+    | ErrorBadRequestMissingDependency
+    | ErrorBadRequestMissingRequiredField
+    | ErrorBadRequestParseError
+    | ErrorBadRequestStaleSchemaFragments
+    | ErrorBadRequestUnexpectedJsonType
+    | ErrorBadRequestValueNotPermitted
+  );
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorBadRequestBadRequest {}
+export interface ErrorBadRequestInvalidApiVersion {
+  /**
+   * The provided API version.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidEnumValue {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values: string[];
+  /**
+   * The field whose enum value is invalid.
+   */
+  field_name: string;
+  /**
+   * The value that was received.
+   */
+  value: string;
+}
+export interface ErrorBadRequestInvalidField {
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestMissingDependency {
+  /**
+   * The dependent fields.
+   */
+  dependencies?: ErrorBadRequestMissingDependencyDependency[];
+  /**
+   * The field on which the value depends.
+   */
+  dependent_field_name?: string;
+  /**
+   * The value which needs to be set of the dependent field.
+   */
+  dependent_field_value?: string;
+  /**
+   * The field whose value was received.
+   */
+  provided_field_name?: string;
+  /**
+   * The value that was received.
+   */
+  provided_field_value?: string;
+}
+export interface ErrorBadRequestMissingDependencyDependency {
+  /**
+   * The dependent field name.
+   */
+  field_name: string;
+  /**
+   * The dependent field value.
+   */
+  field_value: string;
+}
+export interface ErrorBadRequestMissingRequiredField {
+  /**
+   * The missing field's name.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestParseError {}
+/**
+ * Error indicating that the request contained one or more stale schema
+ * fragments, which are schema fragments that have been replaced by a
+ * newer version and are therefore considered deprecated schema fragments.
+ * The caller should refresh and use the latest schema fragments in their
+ * request.
+ *
+ */
+export interface ErrorBadRequestStaleSchemaFragments {}
+export interface ErrorBadRequestUnexpectedJsonType {
+  actual: "array" | "bool" | "null" | "number" | "object" | "string";
+  expected: "array" | "bool" | "null" | "number" | "object" | "string";
+  /**
+   * The field name that's invalid.
+   */
+  field_name: string;
+}
+export interface ErrorBadRequestValueNotPermitted {
+  /**
+   * The allowed values for the field.
+   */
+  allowed_values?: string[];
+  /**
+   * The field whose value is not permitted.
+   */
+  field_name: string;
+  /**
+   * The reason the value isn't permitted.
+   */
+  reason?: string;
+}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"401"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "unauthenticated"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorUnauthorized = ErrorBase & ErrorUnauthorizedUnauthenticated;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorUnauthorizedUnauthenticated {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"403"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "forbidden"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorForbidden = ErrorBase & ErrorForbiddenForbidden;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorForbiddenForbidden {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"404"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "not_found"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorNotFound = ErrorBase & ErrorNotFoundNotFound;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorNotFoundNotFound {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"429"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "retry_after": 0,
+  "type": "too_many_requests"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorTooManyRequests = ErrorBase & ErrorTooManyRequestsTooManyRequests;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorTooManyRequestsTooManyRequests {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"500"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "reference_id": "string",
+  "type": "internal_error"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorInternalServerError = ErrorBase & ErrorInternalServerErrorInternalError;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorInternalServerErrorInternalError {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+<Tab value={"503"}>
+
+
+
+```json title="Example Response"
+{
+  "detail": "string",
+  "message": "string",
+  "type": "service_unavailable"
+}
+```
+
+<Accordions>
+
+<Accordion title={"Typescript Definition"}>
+
+```ts
+export type ErrorServiceUnavailable = ErrorBase & ErrorServiceUnavailableServiceUnavailable;
+
+export interface ErrorBase {
+  /**
+   * Error detail information.
+   */
+  detail?: string;
+  /**
+   * The message associated with the error.
+   */
+  message?: string;
+}
+export interface ErrorServiceUnavailableServiceUnavailable {}
+
+```
+
+</Accordion>
+
+</Accordions>
+
+</Tab>
+
+</Tabs>
+
+</APIExample>
+
+</API>
+
+</Root>
