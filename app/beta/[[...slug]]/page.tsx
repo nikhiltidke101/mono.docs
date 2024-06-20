@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { utils, type Page } from "@/utils/source";
-import { DocsPage, DocsBody } from "fumadocs-ui/page";
+import { DocsBody } from "fumadocs-ui/page";
 import { Card, Cards } from "fumadocs-ui/components/card";
+import { DocsPage } from "@/modules/ui/page";
 
 export default async function Page({
   params,
@@ -12,13 +13,16 @@ export default async function Page({
 }) {
   const page = utils.getPage(params.slug);
 
-  if (!page) notFound();
+  if (!page) redirect("/beta");
 
   return (
-    <DocsPage>
-      <h1>{page.data.title}</h1>
+    <DocsPage
+      toc={page.data.exports.toc}
+      tableOfContent={{
+        enabled: page.data.toc,
+      }}
+    >
       <DocsBody>
-        {/* {preview && preview in Preview ? Preview[preview] : null} */}
         {page.data.index ? (
           <Category page={page} />
         ) : (

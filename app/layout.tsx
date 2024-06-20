@@ -2,9 +2,10 @@ import "./global.css";
 
 import type { ReactNode } from "react";
 
-import { DocsLayout } from "fumadocs-ui/layout";
 import { RootToggle } from "fumadocs-ui/components/layout/root-toggle";
-import { RootProvider } from "fumadocs-ui/provider";
+
+import { DocsLayout } from "@/modules/ui/layout";
+import { RootProvider } from "@/modules/ui/provider";
 
 import { utils } from "../utils/source";
 
