@@ -73,8 +73,8 @@ export async function generateFiles({
 
           const outPath = join(outputDir, filename, `${tagName}.mdx`);
 
-          // write(outPath, result.content);
-          // console.log(`Generated: ${outPath}`);
+          write(outPath, result.content);
+          console.log(`Generated: ${outPath}`);
         });
       }
     })
