@@ -95,10 +95,16 @@ export async function generate(
 
   for (const route of routes) {
     for (const method of route.methods) {
+      const title = method.operationId
+        ?.split("-")
+        .filter((item) => !method.tags?.includes(item))
+        .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+        .join(" ");
+
       methods.push({
         type: method.method,
-        title: method.summary,
-        slug: slug(method.summary ?? ""),
+        title,
+        slug: method.operationId ?? "",
       });
       s.push(await renderOperation(route.path, method, serverUrl));
     }

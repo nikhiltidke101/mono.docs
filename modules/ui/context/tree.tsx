@@ -32,6 +32,8 @@ function getNavigationList(
 ): (PageTree.Item | PageTree.OpenAPIFolder)[] {
   return tree.flatMap((node) => {
     if (node.type === "separator") return [];
+    if (node.type === "href") return [];
+    if (node.type === "openapi_folder") return [];
     if (node.type === "folder") {
       const children = getNavigationList(node.children);
 

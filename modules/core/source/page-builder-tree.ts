@@ -182,6 +182,7 @@ function buildAPIFolderNode(
     name: data.data.title,
     children: methods,
     url: ctx.options.getUrl(data.slugs, ctx.lang),
+    defaultOpen: false,
   };
 
   return node;

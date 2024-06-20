@@ -8,7 +8,7 @@ import * as PageTree from "@/modules/core/server/page-tree";
 import { NavProps } from "./layouts/nav";
 import { LinksMenu } from "./layouts/links-menu";
 import { DynamicSidebar } from "./components/dynamic-sidebar";
-import { Sidebar, SidebarProps } from "./components/sidebar";
+import { Sidebar, SidebarProps } from "./layouts/sidebar";
 
 type ActiveType = "none" | "url" | "nested-url";
 

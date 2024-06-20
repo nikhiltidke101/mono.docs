@@ -269,10 +269,9 @@ function APIFolderNode({
   level: number;
 }): React.ReactElement {
   const { defaultOpenLevel } = useContext(Context);
+
   const { closeOnRedirect } = useSidebar();
   const pathname = usePathname();
-
-  // console.log({ children });
 
   const active = index !== undefined && isActive(index.url, pathname, false);
   const childActive = useMemo(
@@ -281,7 +280,7 @@ function APIFolderNode({
   );
 
   const shouldExtend =
-    active || childActive || defaultOpenLevel >= level || defaultOpen;
+    active || childActive || defaultOpenLevel > level || defaultOpen;
   const [extend, setExtend] = useState(shouldExtend);
 
   useEffect(() => {
