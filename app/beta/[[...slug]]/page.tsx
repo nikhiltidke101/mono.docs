@@ -1,24 +1,28 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
-import { utils, type Page } from "@/utils/source";
-import { DocsPage, DocsBody } from "fumadocs-ui/page";
+import { utilsBeta, type PageBeta } from "@/utils/source";
+import { DocsBody } from "fumadocs-ui/page";
 import { Card, Cards } from "fumadocs-ui/components/card";
+import { DocsPage } from "@/modules/ui/page";
 
 export default async function Page({
   params,
 }: {
   params: { slug?: string[] };
 }) {
-  const page = utils.getPage(params.slug);
+  const page = utilsBeta.getPage(params.slug);
 
-  if (!page) notFound();
+  if (!page) redirect("/beta");
 
   return (
-    <DocsPage>
-      <h1>{page.data.title}</h1>
+    <DocsPage
+      toc={page.data.exports.toc}
+      tableOfContent={{
+        enabled: page.data.toc,
+      }}
+    >
       <DocsBody>
-        {/* {preview && preview in Preview ? Preview[preview] : null} */}
         {page.data.index ? (
           <Category page={page} />
         ) : (
@@ -29,8 +33,8 @@ export default async function Page({
   );
 }
 
-function Category({ page }: { page: Page }): React.ReactElement {
-  const filtered = utils
+function Category({ page }: { page: PageBeta }): React.ReactElement {
+  const filtered = utilsBeta
     .getPages()
     .filter(
       (item) =>
@@ -52,13 +56,13 @@ function Category({ page }: { page: Page }): React.ReactElement {
 }
 
 export async function generateStaticParams() {
-  return utils.getPages().map((page) => ({
+  return utilsBeta.getPages().map((page) => ({
     slug: page.slugs,
   }));
 }
 
 export function generateMetadata({ params }: { params: { slug?: string[] } }) {
-  const page = utils.getPage(params.slug);
+  const page = utilsBeta.getPage(params.slug);
 
   if (page == null) notFound();
 

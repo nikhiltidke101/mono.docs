@@ -1,6 +1,38 @@
 ---
+type: openapi
 title: product-usage
 description: Product Usage APIs
+methods:
+  - type: POST
+    title: Metrics Devrev Ingest
+    slug: metrics-devrev-ingest
+  - type: GET
+    title: Uoms Count
+    slug: uoms-count
+  - type: POST
+    title: Uoms Count Post
+    slug: uoms-count-post
+  - type: POST
+    title: Uoms Create
+    slug: uoms-create
+  - type: POST
+    title: Uoms Delete
+    slug: uoms-delete
+  - type: GET
+    title: Uoms Get
+    slug: uoms-get
+  - type: POST
+    title: Uoms Get Post
+    slug: uoms-get-post
+  - type: GET
+    title: Uoms List
+    slug: uoms-list
+  - type: POST
+    title: Uoms List Post
+    slug: uoms-list-post
+  - type: POST
+    title: Uoms Update
+    slug: uoms-update
 toc: false
 ---
 
@@ -1528,7 +1560,6 @@ Stores aggregation type and dimension information.
 <Accordion title={"Object Type"}>
 
 <Property required={true} deprecated={false} name={"aggregation_type"} type={"string"}>
-
 
 <span>Value in:  `"duration" | "latest" | "maximum" | "minimum" | "oldest" | "running_total" | "sum" | "unique_count"`</span>
 

@@ -1,5 +1,5 @@
 {
-  "title": "Public",
-  "root": true,
-  "pages": ["---About---", "index",  "---API Reference---", "..."]
-}
+    "title": "Beta",
+    "root": true,
+    "pages": ["---About---", "index",  "---API Reference---", "..."]
+  }
