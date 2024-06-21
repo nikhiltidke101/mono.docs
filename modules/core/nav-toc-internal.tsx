@@ -15,6 +15,8 @@ const ScrollContext = createContext<RefObject<HTMLElement>>({ current: null });
 
 import { mergeRefs } from "@/modules/core/utils/merge-refs";
 import { useAnchorObserver } from "@/modules/core/utils/use-anchor-observer";
+import { Node } from "./server/page-tree";
+import { useRouter } from "next/navigation";
 
 /**
  * The id of active anchor (doesn't include hash)
@@ -24,11 +26,7 @@ export function useActiveAnchor(): string | undefined {
 }
 
 export interface AnchorProviderProps {
-  toc: {
-    type: string;
-    slug: string;
-    title: string;
-  }[];
+  toc: Node[];
   children?: ReactNode;
 }
 
@@ -57,7 +55,7 @@ export function AnchorProvider({
   children,
 }: AnchorProviderProps): React.ReactElement {
   const headings = useMemo(() => {
-    return toc.map((item) => item.slug.split("#")[1]);
+    return toc.map((item) => (item.type === "href" ? item.slug : ""));
   }, [toc]);
 
   const activeAnchor = useAnchorObserver(headings);
@@ -82,6 +80,7 @@ export const TOCItem = forwardRef<HTMLAnchorElement, TOCItemProps>(
     const activeAnchor = useActiveAnchor();
     const anchorRef = useRef<HTMLAnchorElement>(null);
     const mergedRef = mergeRefs(anchorRef, ref);
+    const router = useRouter();
 
     const isActive = activeAnchor === props.href.split("#")[1];
     const onActiveRef = useRef<(active: boolean) => void>();
@@ -105,6 +104,7 @@ export const TOCItem = forwardRef<HTMLAnchorElement, TOCItemProps>(
 
     useEffect(() => {
       onActiveRef.current?.(isActive);
+      if (isActive) router.replace(props.href);
     }, [isActive]);
 
     return (

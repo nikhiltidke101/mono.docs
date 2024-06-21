@@ -2,7 +2,8 @@ import { cva } from "class-variance-authority";
 import { ChevronDown, ExternalLinkIcon } from "lucide-react";
 import * as PageTree from "@/modules/core/server/page-tree";
 import * as Base from "fumadocs-core/sidebar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as Primitive from "@/modules/core/nav-toc-internal";
 import {
   createContext,
   type HTMLAttributes,
@@ -11,6 +12,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from "react";
 import Link from "fumadocs-core/link";
 import { cn } from "@/modules/ui/utils/cn";
@@ -190,9 +192,7 @@ function NodeList({
   return (
     <div {...props}>
       {items.map((item, i) => {
-        // console.log("NodeList", item, i);
         const id = `${item.type}_${i.toString()}`;
-
         switch (item.type) {
           case "separator":
             return <components.Separator key={id} item={item} />;
@@ -237,29 +237,31 @@ function PageNode({
 }
 
 function HrefNode({
-  item: { url, name, method },
+  item: { url, name, setMarker },
 }: {
   item: PageTree.APIHref;
 }): React.ReactElement {
-  const pathname = usePathname();
-  const { closeOnRedirect } = useSidebar();
-  const active = isActive(url, pathname, false);
+  const ref = useRef<HTMLAnchorElement>(null);
 
   return (
-    <Link
+    <Primitive.TOCItem
+      ref={ref}
       href={url}
-      className={cn(itemVariants({ active }))}
-      onClick={useCallback(() => {
-        closeOnRedirect.current = !active;
-      }, [closeOnRedirect, active])}
+      onActiveChange={(active) => {
+        const element = ref.current;
+        if (active && element && setMarker)
+          setMarker([element.offsetTop, element.clientHeight]);
+      }}
+      className={cn(
+        "text-muted-foreground transition-colors data-[active=true]:font-medium data-[active=true]:text-primary"
+      )}
     >
-      <span className="font-bold px-1 py-0.5 bg-accent-foreground">
-        {method}{" "}
-      </span>
       {name}
-    </Link>
+    </Primitive.TOCItem>
   );
 }
+
+export const NavTocProvider = Primitive.AnchorProvider;
 
 function APIFolderNode({
   item: { name, children, index, defaultOpen = false },
@@ -268,19 +270,30 @@ function APIFolderNode({
   item: PageTree.OpenAPIFolder;
   level: number;
 }): React.ReactElement {
-  const { defaultOpenLevel } = useContext(Context);
-
-  const { closeOnRedirect } = useSidebar();
   const pathname = usePathname();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const markerRef = useRef<HTMLDivElement>(null);
+  const { activeNode } = useTreeContext();
+
+  const [hash, setHash] = useState("");
+  useEffect(() => {
+    const updateHash = () => {
+      setHash(window.location.hash);
+    };
+    updateHash();
+    window.addEventListener("hashchange", updateHash);
+    return () => {
+      window.removeEventListener("hashchange", updateHash);
+    };
+  }, []);
 
   const active = index !== undefined && isActive(index.url, pathname, false);
   const childActive = useMemo(
-    () => hasActive(children, pathname),
-    [children, pathname]
+    () => hasActive(children, hash.split("#")[1]),
+    [children, hash]
   );
 
-  const shouldExtend =
-    active || childActive || defaultOpenLevel > level || defaultOpen;
+  const shouldExtend = active || childActive;
   const [extend, setExtend] = useState(shouldExtend);
 
   useEffect(() => {
@@ -292,12 +305,19 @@ function APIFolderNode({
       if (e.target !== e.currentTarget || active) {
         setExtend((prev) => !prev);
         e.preventDefault();
-      } else {
-        closeOnRedirect.current = !active;
       }
     },
-    [closeOnRedirect, active]
+    [active]
   );
+
+  const setPos = useCallback(([top, height]: [top: number, height: number]) => {
+    const element = markerRef.current;
+    if (!element || containerRef.current?.clientHeight === 0) return;
+
+    element.style.setProperty("top", `${top.toString()}px`);
+    element.style.setProperty("height", `${height.toString()}px`);
+    element.style.setProperty("display", "block");
+  }, []);
 
   const content = (
     <>
@@ -324,11 +344,30 @@ function APIFolderNode({
         </CollapsibleTrigger>
       )}
       <CollapsibleContent>
-        <NodeList
-          className="ms-2 flex flex-col border-s py-2 ps-2"
-          items={children}
-          level={level}
-        />
+        <NavTocProvider toc={activeNode?.children ?? []}>
+          <Primitive.ScrollProvider containerRef={containerRef}>
+            <div className="relative">
+              {activeNode?.name === index?.name ? (
+                <div
+                  role="none"
+                  ref={markerRef}
+                  className="absolute start-0 w-0.5 min-h-2 bg-primary transition-all ms-2"
+                />
+              ) : null}
+
+              <NodeList
+                className="ms-2 flex flex-col border-s py-2 ps-4"
+                items={children.map((item) => {
+                  return {
+                    ...item,
+                    setMarker: setPos,
+                  };
+                })}
+                level={level}
+              />
+            </div>
+          </Primitive.ScrollProvider>
+        </NavTocProvider>
       </CollapsibleContent>
     </Collapsible>
   );
