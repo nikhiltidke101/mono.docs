@@ -7,6 +7,7 @@ interface TreeContextType {
   tree: PageTree.Root;
   navigation: (PageTree.Item | PageTree.OpenAPIFolder)[];
   root: PageTree.Root | PageTree.Folder;
+  activeNode?: PageTree.OpenAPIFolder | undefined;
 }
 
 const TreeContext = createContext<TreeContextType | undefined>(undefined);
@@ -22,6 +23,22 @@ function findRoot(
       if (root) return root;
       if (item.root === true && hasActive(item.children, pathname)) {
         return item;
+      }
+    }
+  }
+}
+
+function findNode(
+  tree: PageTree.Root,
+  pathname: string
+): PageTree.OpenAPIFolder | undefined {
+  for (const node of tree.children) {
+    if (node.type === "openapi_folder") {
+      const found = findNode(node, pathname);
+      if (found) return found;
+
+      if (node.url === pathname) {
+        return node;
       }
     }
   }
@@ -57,11 +74,13 @@ export function TreeContextProvider({
   const value = useMemo<TreeContextType>(() => {
     const root = findRoot(tree.children, pathname) ?? tree;
     const navigation = getNavigationList(root.children);
+    const activeNode = findNode(tree, pathname);
 
     return {
       root,
       navigation,
       tree,
+      activeNode,
     };
   }, [pathname, tree]);
 

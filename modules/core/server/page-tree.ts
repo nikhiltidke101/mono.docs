@@ -16,6 +16,7 @@ export interface APIHref {
    * The anchor slug of the method
    */
   slug: string;
+  setMarker?: ([top, height]: [top: number, height: number]) => void;
 }
 
 export interface Item {
